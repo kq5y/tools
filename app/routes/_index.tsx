@@ -14,6 +14,11 @@ const roots: ToolRoot[] = [
     desc: "Caesar Cipher Encryption and Decryption",
   },
   {
+    cat: "crypto",
+    title: "substitution",
+    desc: "Helping to decipher substitutions",
+  },
+  {
     cat: "school",
     title: "dakoku",
     desc: "Lecture attendance management",
