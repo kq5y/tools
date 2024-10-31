@@ -4,9 +4,16 @@
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  @apply bg-gray-100 text-gray-800;
+  @apply min-w-full;
+
+  font-family: "Inconsolata", monospace;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
+  }
+
+  main {
+    @apply max-w-xl m-auto p-4;
   }
 }
