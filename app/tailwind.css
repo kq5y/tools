@@ -16,4 +16,8 @@ body {
   main {
     @apply max-w-xl m-auto p-4;
   }
+
+  textarea {
+    @apply bg-gray-100 text-gray-800;
+  }
 }
