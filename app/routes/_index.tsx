@@ -7,7 +7,13 @@ interface ToolRoot {
   desc: string
 }
 
-const roots: ToolRoot[] = []
+const roots: ToolRoot[] = [
+  {
+    cat: "crypto",
+    title: "caesar",
+    desc: "Caesar Cipher Encryption and Decryption",
+  },
+]
 
 export const meta: MetaFunction = () => {
   return [
