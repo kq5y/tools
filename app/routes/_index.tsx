@@ -13,6 +13,11 @@ const roots: ToolRoot[] = [
     title: "caesar",
     desc: "Caesar Cipher Encryption and Decryption",
   },
+  {
+    cat: "school",
+    title: "dakoku",
+    desc: "Lecture attendance management",
+  },
 ]
 
 export const meta: MetaFunction = () => {
