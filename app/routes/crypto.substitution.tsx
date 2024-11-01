@@ -35,6 +35,17 @@ export default function Substitution() {
       };
     });
   }, [encrypted, mapping]);
+  const letterFrequency = useMemo(() => {
+    const frequency: { [key: string]: number } = {};
+    encrypted.toLowerCase().split("").forEach((char) => {
+      if (alphabet.includes(char)) {
+        frequency[char] = (frequency[char] || 0) + 1;
+      }
+    });
+    return Object.entries(frequency)
+      .sort((a, b) => b[1] - a[1])
+      .map(([letter, count]) => ({ letter, count }));
+  }, [encrypted]);
   return (
     <div>
       <h1 className="text-2xl font-bold">Substitution Support</h1>
@@ -90,6 +101,16 @@ export default function Substitution() {
             onChange={e => setEnableTextWrap(e.target.checked)}
           />
           <label htmlFor="textWrapCheckbox">text wrap</label>
+        </div>
+        <div className="mb-2">
+          <div className="flex flex-wrap gap-x-4">
+            {letterFrequency.map(({ letter, count }) => (
+              <div key={letter} className="flex items-center">
+                <span className="font-bold">{letter.toUpperCase()}:</span>
+                <span className="ml-1">{count}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
