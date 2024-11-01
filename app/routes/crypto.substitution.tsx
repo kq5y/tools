@@ -22,7 +22,7 @@ export default function Substitution() {
       count[letter] = Object.values(mapping).filter((v) => v === letter).length;
     });
     return count;
-  }, [mapping]);
+  }, [alphabet, mapping]);
   const decrypted = useMemo(() => {
     return encrypted.split("").map((char) => {
       const lowerChar = char.toLowerCase();
@@ -34,7 +34,7 @@ export default function Substitution() {
         isReplaced: Boolean(mapping[lowerChar] || alphabet.filter((l) => l == lowerChar).length <= 0),
       };
     });
-  }, [encrypted, mapping]);
+  }, [alphabet, encrypted, mapping]);
   const letterFrequency = useMemo(() => {
     const frequency: { [key: string]: number } = {};
     encrypted.toLowerCase().split("").forEach((char) => {
@@ -46,7 +46,7 @@ export default function Substitution() {
       letter,
       count: frequency[letter] || 0,
     })).sort((a, b) => b.count - a.count);
-  }, [encrypted]);
+  }, [alphabet, encrypted]);
   return (
     <div>
       <h1 className="text-2xl font-bold">Substitution Support</h1>

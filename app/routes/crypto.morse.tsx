@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -72,7 +72,7 @@ export default function Morse() {
             rows={4}
           />
         </div>
-        <div className="mb-2 flex flex-row gap-4">
+        <div className="mb-2 flex flex-row flex-wrap gap-4">
           <div className="flex flex-row gap-2 items-center">
             <span>Dot:</span>
             <input

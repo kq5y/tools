@@ -63,7 +63,7 @@ export default function Index() {
           <div className="flex flex-col">
             {rootmap[cat].map((r) => (
               <div key={r.title} className="flex gap-x-1 px-4 items-baseline">
-                <Link to={`/${cat}/${r.title}`} className="text-lg font-bold text-indigo-950">
+                <Link to={`/${cat}/${r.title}`} className="text-lg font-bold text-indigo-950 whitespace-nowrap">
                   /{r.title}
                 </Link>
                 <span className="text-gray-500 text-sm">:</span>

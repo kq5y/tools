@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -24,14 +24,11 @@ export default function Dakoku() {
   const [addLectureName, setAddLectureName] = useState("");
   const [addLectureTimes, setAddLectureTimes] = useState(1);
   const [nameRowWidth, setNameRowWidth] = useState(100);
-  const tableNameRowRef = useRef<HTMLTableCellElement | null>(null);
-  useEffect(() => {
-    if(tableNameRowRef.current){
-      const savedData = JSON.parse(localStorage.getItem("attendanceData") || '{"lectures": []}');
-      setData(savedData);
-      setNameRowWidth(tableNameRowRef.current.clientWidth);
-    }
-  }, [tableNameRowRef.current]);
+  const tableNameRowRef = (tableNameRow: HTMLTableCellElement) => {
+    const savedData = JSON.parse(localStorage.getItem("attendanceData") || '{"lectures": []}');
+    setData(savedData);
+    setNameRowWidth(tableNameRow.clientWidth);
+  };
   const saveToLocalStorage = (data: SaveData) => {
     localStorage.setItem("attendanceData", JSON.stringify(data));
   };
@@ -163,7 +160,7 @@ export default function Dakoku() {
           />
           <button
             onClick={handleAddLecture}
-            className="bg-blue-500 text-white px-4 rounded-r-md hover:bg-blue-600 transition"
+            className="bg-indigo-500 text-white px-4 rounded-r-md hover:bg-indigo-600 transition"
           >
             Add
           </button>
@@ -195,7 +192,7 @@ export default function Dakoku() {
         <div className="mb-2">
           <button
             onClick={handleResetData}
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+            className="bg-rose-500 text-white px-4 py-2 rounded hover:bg-rose-600 transition"
           >
             Reset
           </button>
