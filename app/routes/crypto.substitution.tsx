@@ -52,7 +52,7 @@ export default function Substitution() {
       <div className="p-2">
         <div className="mb-2">
           <textarea
-            className={"w-full p-2 border border-gray-300 rounded resize-none overflow-auto " + (enableTextWrap ? "whitespace-normal" : "whitespace-nowrap")}
+            className={"w-full p-2 border border-gray-300 rounded resize-none overflow-auto " + (enableTextWrap ? "break-all" : "whitespace-nowrap")}
             value={encrypted}
             onChange={(e) => setEncrypted(e.target.value)}
             rows={4}
@@ -79,19 +79,21 @@ export default function Substitution() {
             </div>
           ))}
         </div>
-        <div className={"mb-2 p-2 border h-28 bg-white overflow-auto flex " + (enableTextWrap ? "flex-wrap" : "flex-nowrap")}>
-          {decrypted.map((charObj, index) =>
-            charObj.replaced === "\n" ? (
-              <br key={index} />
-            ) : (
-              <span
-                key={index}
-                style={{ color: charObj.isReplaced ? "black" : "red" }}
-              >
-                {charObj.replaced === " " ? "\u00A0" : charObj.replaced}
-              </span>
-            )
-          )}
+        <div className="mb-2 p-2 border h-28 bg-white overflow-auto">
+          <code className={enableTextWrap ? "break-all" : ""} style={{fontFamily: "inherit"}}>
+            {decrypted.map((charObj, index) =>
+              charObj.replaced === "\n" ? (
+                <br key={index} />
+              ) : (
+                <span
+                  key={index}
+                  style={{ color: charObj.isReplaced ? "black" : "red" }}
+                >
+                  {charObj.replaced === " " ? "\u00A0" : charObj.replaced}
+                </span>
+              )
+            )}
+          </code>
         </div>
         <div className="mb-2 flex flex-row gap-2">
           <input
