@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -13,7 +13,7 @@ type AttendanceStatus = "o" | "x" | "-" | "~";
 interface SaveData {
   lectures: {
     name: string,
-    attendance: AttendanceStatus[]
+    attendances: AttendanceStatus[][]
   }[]
 }
 
@@ -22,16 +22,22 @@ const attendanceOptions: AttendanceStatus[] = ["o", "x", "-", "~"];
 export default function Dakoku() {
   const [data, setData] = useState<SaveData>({ lectures: [] });
   const [addLectureName, setAddLectureName] = useState("");
+  const [addLectureTimes, setAddLectureTimes] = useState(1);
+  const [nameRowWidth, setNameRowWidth] = useState(100);
+  const tableNameRowRef = useRef<HTMLTableCellElement | null>(null);
   useEffect(() => {
-    const savedData = JSON.parse(localStorage.getItem("attendanceData") || '{"lectures": []}');
-    setData(savedData);
-  }, []);
+    if(tableNameRowRef.current){
+      const savedData = JSON.parse(localStorage.getItem("attendanceData") || '{"lectures": []}');
+      setData(savedData);
+      setNameRowWidth(tableNameRowRef.current.clientWidth);
+    }
+  }, [tableNameRowRef.current]);
   const saveToLocalStorage = (data: SaveData) => {
     localStorage.setItem("attendanceData", JSON.stringify(data));
   };
   const handleAddLecture = () => {
-    if (addLectureName.length == 0) return;
-    const newLecture = { name: addLectureName, attendance: [...Array(15).fill("-")] };
+    if (addLectureName.length == 0 || addLectureTimes <= 0) return;
+    const newLecture = { name: addLectureName, attendances: [...Array(addLectureTimes).fill([...Array(15).fill("-")])]};
     setData((prevData) => ({ ...prevData, lectures: [...prevData.lectures, newLecture] }));
     saveToLocalStorage({ ...data, lectures: [...data.lectures, newLecture] });
     setAddLectureName("");
@@ -41,12 +47,12 @@ export default function Dakoku() {
     setData((prevData) => ({ ...prevData, lectures: updatedLectures }));
     saveToLocalStorage({ ...data, lectures: updatedLectures });
   };
-  const handleChangeAttendance = (lectureIndex: number, classIndex: number, status: AttendanceStatus) => {
+  const handleChangeAttendance = (lectureIndex: number, timesIndex: number, classIndex: number, status: AttendanceStatus) => {
     const updatedLectures = data.lectures.map((lecture, i) => {
       if (i === lectureIndex) {
-        const updatedAttendance = [...lecture.attendance];
-        updatedAttendance[classIndex] = status; // 更新する出席状況を変更
-        return { ...lecture, attendance: updatedAttendance };
+        const updatedAttendance = [...lecture.attendances];
+        updatedAttendance[timesIndex][classIndex] = status; // 更新する出席状況を変更
+        return { ...lecture, attendances: updatedAttendance };
       }
       return lecture;
     });
@@ -59,9 +65,9 @@ export default function Dakoku() {
   }
   const attendanceSummary = useMemo(() => {
     return data.lectures.map((lecture) => {
-      const attended = lecture.attendance.filter((status) => status === "o").length;
-      const absent = lecture.attendance.filter((status) => status === "x").length;
-      const totalClasses = lecture.attendance.filter((status) => status !== "~").length;
+      const attended = lecture.attendances.flat().filter((status) => status === "o").length;
+      const absent = lecture.attendances.flat().filter((status) => status === "x").length;
+      const totalClasses = lecture.attendances.flat().filter((status) => status !== "~").length;
       const attendanceRate = totalClasses > 0 ? (attended / totalClasses) * 100 : 0;
       return {
         name: lecture.name,
@@ -83,10 +89,11 @@ export default function Dakoku() {
       <h1 className="text-2xl font-bold">Dakoku</h1>
       <div className="p-2">
         <div className="mb-2 overflow-x-auto">
-          <table className="min-w-full text-sm bg-white rounded-lg shadow-md">
+          <table className="min-w-full text-sm bg-white rounded-lg shadow-md border-separate border-spacing-0 table-fixed">
             <thead>
               <tr className="text-base">
-                <th className="sticky left-0 bg-white px-4 py-2 text-left">Name</th>
+                <th ref={tableNameRowRef} className="sticky left-0 bg-white px-4 py-2 text-left">Name</th>
+                <th className="sticky bg-white px-4 py-2 text-left" style={{left: nameRowWidth}}></th>
                 {Array.from({ length: 15 }, (_, i) => (
                   <th key={i} className="px-4 py-2 text-center">{i + 1}</th>
                 ))}
@@ -94,14 +101,25 @@ export default function Dakoku() {
               </tr>
             </thead>
             <tbody>
-              {data.lectures.map((lecture, index) => (
-                <tr key={index} className="hover:bg-gray-50">
-                  <td className="sticky left-0 bg-white px-4 py-2">{lecture.name}</td>
-                  {lecture.attendance.map((status, i) => (
+              {data.lectures.map((lecture, lectureIndex) => lecture.attendances.map((att, times) => (
+                <tr key={lectureIndex * 10 + times} className="hover:bg-gray-50">
+                  {times == 0 && (
+                    <td
+                      rowSpan={lecture.attendances.length}
+                      colSpan={lecture.attendances.length >= 2 ? 1 : 2}
+                      className={"sticky left-0 bg-white px-4 py-2 " + (lecture.attendances.length >= 2 ? "w-[100px]" : "w-[140px]")}
+                    >
+                      {lecture.name}
+                    </td>
+                  )}
+                  {lecture.attendances.length >= 2 && (
+                    <td className="sticky bg-white px-4 py-2" style={{left: nameRowWidth}}>{times + 1}</td>
+                  )}
+                  {att.map((status, i) => (
                     <td key={i} className={"px-4 py-2 text-center " + status2bgColor(status)}>
                       <select
                         value={status}
-                        onChange={(e) => handleChangeAttendance(index, i, e.target.value as AttendanceStatus)}
+                        onChange={(e) => handleChangeAttendance(lectureIndex, times, i, e.target.value as AttendanceStatus)}
                         className="rounded-md p-1"
                       >
                         {attendanceOptions.map((option) => (
@@ -112,16 +130,18 @@ export default function Dakoku() {
                       </select>
                     </td>
                   ))}
-                  <td className="sticky right-0 bg-white px-4 py-2 text-center">
-                    <button
-                      onClick={() => handleDeleteLecture(index)}
-                      className="font-bold text-2xl text-red-600 hover:text-red-800 transition"
-                    >
-                      x
-                    </button>
-                  </td>
+                  {times == 0 && (
+                    <td rowSpan={lecture.attendances.length} className="sticky right-0 bg-white px-4 py-2 text-center">
+                      <button
+                        onClick={() => handleDeleteLecture(lectureIndex)}
+                        className="font-bold text-2xl text-red-600 hover:text-red-800 transition"
+                      >
+                        x
+                      </button>
+                    </td>
+                  )}
                 </tr>
-              ))}
+              )))}
             </tbody>
           </table>
         </div>
@@ -132,6 +152,14 @@ export default function Dakoku() {
             className="border bg-white border-gray-300 p-2 flex-grow rounded-l-md"
             value={addLectureName}
             onChange={(e) => setAddLectureName(e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="Times"
+            className="border bg-white border-gray-300 p-2 flex-grow"
+            min={1} max={7}
+            value={addLectureTimes}
+            onChange={(e) => setAddLectureTimes(Number(e.target.value))}
           />
           <button
             onClick={handleAddLecture}
