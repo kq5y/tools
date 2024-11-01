@@ -12,6 +12,7 @@ export default function Substitution() {
   const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
   const [encrypted, setEncrypted] = useState("");
   const [mapping, setMapping] = useState<{ [key: string]: string }>({});
+  const [enableTextWrap, setEnableTextWrap] = useState(true);
   const handleMappingChange = (letter: string, value: string) => {
     setMapping((prev) => ({ ...prev, [letter]: value }));
   };
@@ -23,11 +24,16 @@ export default function Substitution() {
     return count;
   }, [mapping]);
   const decrypted = useMemo(() => {
-    return encrypted.split("").map((char) => ({
-      original: char,
-      replaced: mapping[char] || char,
-      isReplaced: Boolean(mapping[char]),
-    }));
+    return encrypted.split("").map((char) => {
+      const lowerChar = char.toLowerCase();
+      const mappedChar = mapping[lowerChar] || char;
+      const isUpperCase = char === char.toUpperCase();
+      return {
+        original: char,
+        replaced: isUpperCase ? mappedChar.toUpperCase() : mappedChar,
+        isReplaced: Boolean(mapping[lowerChar] || alphabet.filter((l) => l == lowerChar).length <= 0),
+      };
+    });
   }, [encrypted, mapping]);
   return (
     <div>
@@ -35,7 +41,7 @@ export default function Substitution() {
       <div className="p-2">
         <div className="mb-2">
           <textarea
-            className="w-full p-2 border border-gray-300 rounded resize-none overflow-auto whitespace-nowrap"
+            className={"w-full p-2 border border-gray-300 rounded resize-none overflow-auto " + (enableTextWrap ? "whitespace-normal" : "whitespace-nowrap")}
             value={encrypted}
             onChange={(e) => setEncrypted(e.target.value)}
             rows={4}
@@ -62,7 +68,7 @@ export default function Substitution() {
             </div>
           ))}
         </div>
-        <div className="mb-2 p-2 border h-28 overflow-auto bg-white">
+        <div className={"mb-2 p-2 border h-28 bg-white overflow-auto flex " + (enableTextWrap ? "flex-wrap" : "flex-nowrap")}>
           {decrypted.map((charObj, index) =>
             charObj.replaced === "\n" ? (
               <br key={index} />
@@ -75,6 +81,15 @@ export default function Substitution() {
               </span>
             )
           )}
+        </div>
+        <div className="mb-2 flex flex-row gap-2">
+          <input
+            type="checkbox"
+            id="textWrapCheckbox"
+            checked={enableTextWrap}
+            onChange={e => setEnableTextWrap(e.target.checked)}
+          />
+          <label htmlFor="textWrapCheckbox">text wrap</label>
         </div>
       </div>
     </div>
