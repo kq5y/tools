@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -24,11 +24,14 @@ export default function Dakoku() {
   const [addLectureName, setAddLectureName] = useState("");
   const [addLectureTimes, setAddLectureTimes] = useState(1);
   const [nameRowWidth, setNameRowWidth] = useState(100);
-  const tableNameRowRef = (tableNameRow: HTMLTableCellElement) => {
-    const savedData = JSON.parse(localStorage.getItem("attendanceData") || '{"lectures": []}');
-    setData(savedData);
+  const tableNameRowRef = (tableNameRow: HTMLTableCellElement | null) => {
+    if (!tableNameRow) return;
     setNameRowWidth(tableNameRow.clientWidth);
   };
+  useEffect(() => {
+    const savedData = JSON.parse(localStorage.getItem("attendanceData") || '{"lectures": []}');
+    setData(savedData);
+  }, []);
   const saveToLocalStorage = (data: SaveData) => {
     localStorage.setItem("attendanceData", JSON.stringify(data));
   };
