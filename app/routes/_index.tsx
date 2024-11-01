@@ -15,6 +15,11 @@ const roots: ToolRoot[] = [
   },
   {
     cat: "crypto",
+    title: "vigenere",
+    desc: "Vigenere Cipher Encryption and Decryption",
+  },
+  {
+    cat: "crypto",
     title: "substitution",
     desc: "Helping to decipher substitutions",
   },
