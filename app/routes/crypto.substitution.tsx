@@ -42,9 +42,10 @@ export default function Substitution() {
         frequency[char] = (frequency[char] || 0) + 1;
       }
     });
-    return Object.entries(frequency)
-      .sort((a, b) => b[1] - a[1])
-      .map(([letter, count]) => ({ letter, count }));
+    return alphabet.map((letter) => ({
+      letter,
+      count: frequency[letter] || 0,
+    })).sort((a, b) => b.count - a.count);
   }, [encrypted]);
   return (
     <div>
@@ -73,6 +74,7 @@ export default function Substitution() {
                 type="text"
                 maxLength={1}
                 value={mapping[letter] || ""}
+                onFocus={(e) => e.target.select()}
                 onChange={(e) => handleMappingChange(letter, e.target.value)}
                 className="w-8 p-1 border text-center"
               />
