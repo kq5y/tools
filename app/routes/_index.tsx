@@ -20,6 +20,11 @@ const roots: ToolRoot[] = [
   },
   {
     cat: "crypto",
+    title: "rail-fence",
+    desc: "Rail-Fence Cipher Encryption and Decryption",
+  },
+  {
+    cat: "crypto",
     title: "substitution",
     desc: "Helping to decipher substitutions",
   },
