@@ -31,21 +31,28 @@ export default function Substitution() {
       return {
         original: char,
         replaced: isUpperCase ? mappedChar.toUpperCase() : mappedChar,
-        isReplaced: Boolean(mapping[lowerChar] || alphabet.filter((l) => l == lowerChar).length <= 0),
+        isReplaced: Boolean(
+          mapping[lowerChar] || alphabet.filter((l) => l == lowerChar).length <= 0
+        ),
       };
     });
   }, [alphabet, encrypted, mapping]);
   const letterFrequency = useMemo(() => {
     const frequency: { [key: string]: number } = {};
-    encrypted.toLowerCase().split("").forEach((char) => {
-      if (alphabet.includes(char)) {
-        frequency[char] = (frequency[char] || 0) + 1;
-      }
-    });
-    return alphabet.map((letter) => ({
-      letter,
-      count: frequency[letter] || 0,
-    })).sort((a, b) => b.count - a.count);
+    encrypted
+      .toLowerCase()
+      .split("")
+      .forEach((char) => {
+        if (alphabet.includes(char)) {
+          frequency[char] = (frequency[char] || 0) + 1;
+        }
+      });
+    return alphabet
+      .map((letter) => ({
+        letter,
+        count: frequency[letter] || 0,
+      }))
+      .sort((a, b) => b.count - a.count);
   }, [alphabet, encrypted]);
   return (
     <div>
@@ -53,7 +60,10 @@ export default function Substitution() {
       <div className="p-2">
         <div className="mb-2">
           <textarea
-            className={"w-full p-2 border border-gray-300 rounded resize-none overflow-auto " + (enableTextWrap ? "break-all" : "whitespace-nowrap")}
+            className={
+              "w-full p-2 border border-gray-300 rounded resize-none overflow-auto " +
+              (enableTextWrap ? "break-all" : "whitespace-nowrap")
+            }
             value={encrypted}
             onChange={(e) => setEncrypted(e.target.value)}
             rows={4}
@@ -82,15 +92,12 @@ export default function Substitution() {
           ))}
         </div>
         <div className="mb-2 p-2 border h-28 bg-white overflow-auto">
-          <code className={enableTextWrap ? "break-all" : ""} style={{fontFamily: "inherit"}}>
+          <code className={enableTextWrap ? "break-all" : ""} style={{ fontFamily: "inherit" }}>
             {decrypted.map((charObj, index) =>
               charObj.replaced === "\n" ? (
                 <br key={index} />
               ) : (
-                <span
-                  key={index}
-                  style={{ color: charObj.isReplaced ? "black" : "red" }}
-                >
+                <span key={index} style={{ color: charObj.isReplaced ? "black" : "red" }}>
                   {charObj.replaced === " " ? "\u00A0" : charObj.replaced}
                 </span>
               )
@@ -102,7 +109,7 @@ export default function Substitution() {
             type="checkbox"
             id="textWrapCheckbox"
             checked={enableTextWrap}
-            onChange={e => setEnableTextWrap(e.target.checked)}
+            onChange={(e) => setEnableTextWrap(e.target.checked)}
           />
           <label htmlFor="textWrapCheckbox">text wrap</label>
         </div>
@@ -118,5 +125,5 @@ export default function Substitution() {
         </div>
       </div>
     </div>
-  )
+  );
 }

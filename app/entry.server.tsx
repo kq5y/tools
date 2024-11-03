@@ -25,11 +25,7 @@ export default async function handleRequest(
   const timeoutId = setTimeout(() => controller.abort(), ABORT_DELAY);
 
   const body = await renderToReadableStream(
-    <RemixServer
-      context={remixContext}
-      url={request.url}
-      abortDelay={ABORT_DELAY}
-    />,
+    <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />,
     {
       signal: controller.signal,
       onError(error: unknown) {

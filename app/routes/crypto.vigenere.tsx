@@ -25,7 +25,7 @@ const vigenereEncrypt = (text: string, key: string): string => {
       return char;
     })
     .join("");
-}
+};
 
 const vigenereDecrypt = (text: string, key: string): string => {
   const keyLength = key.length;
@@ -43,8 +43,8 @@ const vigenereDecrypt = (text: string, key: string): string => {
       }
       return char;
     })
-    .join("")
-}
+    .join("");
+};
 
 export default function Vigenere() {
   const [targetText, setTargetText] = useState("");
@@ -66,7 +66,7 @@ export default function Vigenere() {
             className="w-full p-2 border border-gray-300 rounded resize-none"
             value={targetText}
             placeholder="Target Text"
-            onChange={e => setTargetText(e.target.value)}
+            onChange={(e) => setTargetText(e.target.value)}
             rows={4}
           />
         </div>
@@ -76,7 +76,7 @@ export default function Vigenere() {
             className="border bg-white border-gray-300 p-2 flex-grow rounded-l"
             placeholder="Key"
             value={usingKey}
-            onChange={e => setUsingKey(e.target.value)}
+            onChange={(e) => setUsingKey(e.target.value)}
           />
         </div>
         <div className="mb-2">
@@ -99,5 +99,5 @@ export default function Vigenere() {
         </div>
       </div>
     </div>
-  )
+  );
 }

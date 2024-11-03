@@ -18,8 +18,8 @@ const railFenceEncrypt = (text: string, rails: number): string => {
     if (row === 0 || row === rails - 1) directionDown = !directionDown;
     row += directionDown ? 1 : -1;
   }
-  return rail.flat().join('');
-}
+  return rail.flat().join("");
+};
 
 const railFenceDecrypt = (cipherText: string, rails: number): string => {
   if (rails <= 1) return cipherText;
@@ -27,19 +27,19 @@ const railFenceDecrypt = (cipherText: string, rails: number): string => {
   let directionDown = false;
   let row = 0;
   for (let i = 0; i < cipherText.length; i++) {
-    rail[row][i] = '*';
+    rail[row][i] = "*";
     if (row === 0 || row === rails - 1) directionDown = !directionDown;
     row += directionDown ? 1 : -1;
   }
   let index = 0;
   for (let r = 0; r < rails; r++) {
     for (let c = 0; c < cipherText.length; c++) {
-      if (rail[r][c] === '*' && index < cipherText.length) {
+      if (rail[r][c] === "*" && index < cipherText.length) {
         rail[r][c] = cipherText[index++];
       }
     }
   }
-  let result = '';
+  let result = "";
   row = 0;
   directionDown = false;
   for (let i = 0; i < cipherText.length; i++) {
@@ -48,7 +48,7 @@ const railFenceDecrypt = (cipherText: string, rails: number): string => {
     row += directionDown ? 1 : -1;
   }
   return result;
-}
+};
 
 export default function RailFence() {
   const [targetText, setTargetText] = useState("");
@@ -68,7 +68,7 @@ export default function RailFence() {
             className="w-full p-2 border border-gray-300 rounded resize-none"
             value={targetText}
             placeholder="Target Text"
-            onChange={e => setTargetText(e.target.value)}
+            onChange={(e) => setTargetText(e.target.value)}
             rows={4}
           />
         </div>
@@ -79,7 +79,7 @@ export default function RailFence() {
             placeholder="Rails Count"
             value={usingRails}
             min={1}
-            onChange={e => setUsingRails(Number(e.target.value))}
+            onChange={(e) => setUsingRails(Number(e.target.value))}
           />
         </div>
         <div className="mb-2">
@@ -102,5 +102,5 @@ export default function RailFence() {
         </div>
       </div>
     </div>
-  )
+  );
 }

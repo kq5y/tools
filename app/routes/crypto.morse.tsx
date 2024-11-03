@@ -9,12 +9,43 @@ export const meta: MetaFunction = () => {
 };
 
 const morseCodeMap: Record<string, string> = {
-  A: '.-', B: '-...', C: '-.-.', D: '-..', E: '.', F: '..-.', G: '--.', H: '....', I: '..', J: '.---',
-  K: '-.-', L: '.-..', M: '--', N: '-.', O: '---', P: '.--.', Q: '--.-', R: '.-.', S: '...', T: '-',
-  U: '..-', V: '...-', W: '.--', X: '-..-', Y: '-.--', Z: '--..',
-  '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....',
-  '6': '-....', '7': '--...', '8': '---..', '9': '----.', '0': '-----',
-  ' ': ' '
+  A: ".-",
+  B: "-...",
+  C: "-.-.",
+  D: "-..",
+  E: ".",
+  F: "..-.",
+  G: "--.",
+  H: "....",
+  I: "..",
+  J: ".---",
+  K: "-.-",
+  L: ".-..",
+  M: "--",
+  N: "-.",
+  O: "---",
+  P: ".--.",
+  Q: "--.-",
+  R: ".-.",
+  S: "...",
+  T: "-",
+  U: "..-",
+  V: "...-",
+  W: ".--",
+  X: "-..-",
+  Y: "-.--",
+  Z: "--..",
+  "1": ".----",
+  "2": "..---",
+  "3": "...--",
+  "4": "....-",
+  "5": ".....",
+  "6": "-....",
+  "7": "--...",
+  "8": "---..",
+  "9": "----.",
+  "0": "-----",
+  " ": " ",
 };
 
 const reverseMorseCodeMap = Object.fromEntries(
@@ -29,36 +60,45 @@ export default function Morse() {
   const [spaceLetter, setSpaceLetter] = useState(" ");
   const convertToMorse = (text: string): string => {
     if (tonLetter === "" || tsuLetter === "" || spaceLetter === "") return encryptedText;
-    return text.toUpperCase().split('').map(char => {
-      return morseCodeMap[char] || char;
-    }).join(spaceLetter).trim().replaceAll('.', tonLetter).replaceAll('-', tsuLetter);
+    return text
+      .toUpperCase()
+      .split("")
+      .map((char) => {
+        return morseCodeMap[char] || char;
+      })
+      .join(spaceLetter)
+      .trim()
+      .replaceAll(".", tonLetter)
+      .replaceAll("-", tsuLetter);
   };
   const convertToText = (morse: string): string => {
     if (tonLetter === "" || tsuLetter === "" || spaceLetter === "") return targetText;
-    const morseWithStandardSymbols = morse
-      .replaceAll(tonLetter, '.')
-      .replaceAll(tsuLetter, '-');
-    return morseWithStandardSymbols.split(spaceLetter).map(code => {
-      return reverseMorseCodeMap[code] || code;
-    }).join('').trim();
+    const morseWithStandardSymbols = morse.replaceAll(tonLetter, ".").replaceAll(tsuLetter, "-");
+    return morseWithStandardSymbols
+      .split(spaceLetter)
+      .map((code) => {
+        return reverseMorseCodeMap[code] || code;
+      })
+      .join("")
+      .trim();
   };
   const handleTargetTextChange = (text: string) => {
     setTargetText(text);
     setEncryptedText(convertToMorse(text));
-  }
+  };
   const handleEncryptedTextChange = (text: string) => {
     setEncryptedText(text);
     setTargetText(convertToText(text));
-  }
+  };
   const handleLetterChange = (ton: string, tsu: string, space: string) => {
     setTonLetter(ton);
     setTsuLetter(tsu);
     setSpaceLetter(space);
-  }
+  };
   const handleLetterApply = (up: boolean) => {
-    if(up) setTargetText(convertToText(encryptedText));
+    if (up) setTargetText(convertToText(encryptedText));
     else setEncryptedText(convertToMorse(targetText));
-  }
+  };
   return (
     <div>
       <h1 className="text-2xl font-bold">Morse Code</h1>
@@ -68,7 +108,7 @@ export default function Morse() {
             className="w-full p-2 border border-gray-300 rounded resize-none"
             value={targetText}
             placeholder="Target Text"
-            onChange={e => handleTargetTextChange(e.target.value)}
+            onChange={(e) => handleTargetTextChange(e.target.value)}
             rows={4}
           />
         </div>
@@ -80,7 +120,7 @@ export default function Morse() {
               className="border bg-white border-gray-300 p-2 flex-grow rounded-l w-12"
               placeholder="."
               value={tonLetter}
-              onChange={e => handleLetterChange(e.target.value, tsuLetter, spaceLetter)}
+              onChange={(e) => handleLetterChange(e.target.value, tsuLetter, spaceLetter)}
             />
           </div>
           <div className="flex flex-row gap-2 items-center">
@@ -90,7 +130,7 @@ export default function Morse() {
               className="border bg-white border-gray-300 p-2 flex-grow rounded-l w-12"
               placeholder="-"
               value={tsuLetter}
-              onChange={e => handleLetterChange(tonLetter, e.target.value, spaceLetter)}
+              onChange={(e) => handleLetterChange(tonLetter, e.target.value, spaceLetter)}
             />
           </div>
           <div className="flex flex-row gap-2 items-center">
@@ -100,7 +140,7 @@ export default function Morse() {
               className="border bg-white border-gray-300 p-2 flex-grow rounded-l w-12"
               placeholder=" "
               value={spaceLetter}
-              onChange={e => handleLetterChange(tonLetter, tsuLetter, e.target.value)}
+              onChange={(e) => handleLetterChange(tonLetter, tsuLetter, e.target.value)}
             />
           </div>
           <div className="flex flex-row gap-2 items-center">
@@ -122,11 +162,11 @@ export default function Morse() {
           <textarea
             className="w-full p-2 border border-gray-300 rounded resize-none"
             value={encryptedText}
-            onChange={e => handleEncryptedTextChange(e.target.value)}
+            onChange={(e) => handleEncryptedTextChange(e.target.value)}
             rows={4}
           />
         </div>
       </div>
     </div>
-  )
+  );
 }
