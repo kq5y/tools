@@ -43,6 +43,7 @@ export default function Dakoku() {
     setAddLectureName("");
   };
   const handleDeleteLecture = (index: number) => {
+    if(!window.confirm("Are you sure you want to delete?")) return;
     const updatedLectures = data.lectures.filter((_, i) => i !== index);
     setData((prevData) => ({ ...prevData, lectures: updatedLectures }));
     saveToLocalStorage({ ...data, lectures: updatedLectures });
@@ -51,7 +52,7 @@ export default function Dakoku() {
     const updatedLectures = data.lectures.map((lecture, i) => {
       if (i === lectureIndex) {
         const updatedAttendance = [...lecture.attendances];
-        updatedAttendance[timesIndex][classIndex] = status; // 更新する出席状況を変更
+        updatedAttendance[timesIndex][classIndex] = status;
         return { ...lecture, attendances: updatedAttendance };
       }
       return lecture;
@@ -60,6 +61,7 @@ export default function Dakoku() {
     saveToLocalStorage({ ...data, lectures: updatedLectures });
   };
   const handleResetData = () => {
+    if(!window.confirm("Are you sure you want to reset?")) return;
     setData({ lectures: [] });
     localStorage.removeItem("attendanceData");
   }
