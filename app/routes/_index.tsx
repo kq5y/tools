@@ -50,7 +50,8 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   const rootmap = roots.reduce(
     (m, r) => {
-      (m[r.cat] = m[r.cat] || []).push(r);
+      if (!m[r.cat]) m[r.cat] = [];
+      m[r.cat].push(r);
       return m;
     },
     {} as Record<string, ToolRoot[]>

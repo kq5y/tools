@@ -78,6 +78,7 @@
         "useValidTypeof": "error"
       }
     },
+    "include": ["app"],
     "ignore": ["!./.server", "!./.client"]
   },
   "javascript": {
