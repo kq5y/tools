@@ -5,5 +5,13 @@
   "files.insertFinalNewline": true,
   "files.associations": {
     "*.css": "tailwindcss"
+  },
+  "[typescript][typescriptreact][javascript][javascriptreact][vue][json][css]": {
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "quickfix.biome": "explicit",
+      "source.organizeImports.biome": "explicit"
+    }
   }
 }
