@@ -38,6 +38,11 @@ const roots: ToolRoot[] = [
     title: "dakoku",
     desc: "Lecture attendance management",
   },
+  {
+    cat: "automata",
+    title: "simplest",
+    desc: "Generate the simplest automaton",
+  },
 ];
 
 export const meta: MetaFunction = () => {
