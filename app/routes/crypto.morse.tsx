@@ -59,7 +59,8 @@ export default function Morse() {
   const [tsuLetter, setTsuLetter] = useState("-");
   const [spaceLetter, setSpaceLetter] = useState(" ");
   const convertToMorse = (text: string): string => {
-    if (tonLetter === "" || tsuLetter === "" || spaceLetter === "") return encryptedText;
+    if (tonLetter === "" || tsuLetter === "" || spaceLetter === "")
+      return encryptedText;
     return text
       .toUpperCase()
       .split("")
@@ -72,8 +73,11 @@ export default function Morse() {
       .replaceAll("-", tsuLetter);
   };
   const convertToText = (morse: string): string => {
-    if (tonLetter === "" || tsuLetter === "" || spaceLetter === "") return targetText;
-    const morseWithStandardSymbols = morse.replaceAll(tonLetter, ".").replaceAll(tsuLetter, "-");
+    if (tonLetter === "" || tsuLetter === "" || spaceLetter === "")
+      return targetText;
+    const morseWithStandardSymbols = morse
+      .replaceAll(tonLetter, ".")
+      .replaceAll(tsuLetter, "-");
     return morseWithStandardSymbols
       .split(spaceLetter)
       .map((code) => {
@@ -120,7 +124,9 @@ export default function Morse() {
               className="border bg-white border-gray-300 p-2 flex-grow rounded-l w-12"
               placeholder="."
               value={tonLetter}
-              onChange={(e) => handleLetterChange(e.target.value, tsuLetter, spaceLetter)}
+              onChange={(e) =>
+                handleLetterChange(e.target.value, tsuLetter, spaceLetter)
+              }
             />
           </div>
           <div className="flex flex-row gap-2 items-center">
@@ -130,7 +136,9 @@ export default function Morse() {
               className="border bg-white border-gray-300 p-2 flex-grow rounded-l w-12"
               placeholder="-"
               value={tsuLetter}
-              onChange={(e) => handleLetterChange(tonLetter, e.target.value, spaceLetter)}
+              onChange={(e) =>
+                handleLetterChange(tonLetter, e.target.value, spaceLetter)
+              }
             />
           </div>
           <div className="flex flex-row gap-2 items-center">
@@ -140,7 +148,9 @@ export default function Morse() {
               className="border bg-white border-gray-300 p-2 flex-grow rounded-l w-12"
               placeholder=" "
               value={spaceLetter}
-              onChange={(e) => handleLetterChange(tonLetter, tsuLetter, e.target.value)}
+              onChange={(e) =>
+                handleLetterChange(tonLetter, tsuLetter, e.target.value)
+              }
             />
           </div>
           <div className="flex flex-row gap-2 items-center">

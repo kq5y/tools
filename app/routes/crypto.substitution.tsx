@@ -32,7 +32,8 @@ export default function Substitution() {
         original: char,
         replaced: isUpperCase ? mappedChar.toUpperCase() : mappedChar,
         isReplaced: Boolean(
-          mapping[lowerChar] || alphabet.filter((l) => l == lowerChar).length <= 0
+          mapping[lowerChar] ||
+            alphabet.filter((l) => l == lowerChar).length <= 0
         ),
       };
     });
@@ -92,12 +93,18 @@ export default function Substitution() {
           ))}
         </div>
         <div className="mb-2 p-2 border h-28 bg-white overflow-auto">
-          <code className={enableTextWrap ? "break-all" : ""} style={{ fontFamily: "inherit" }}>
+          <code
+            className={enableTextWrap ? "break-all" : ""}
+            style={{ fontFamily: "inherit" }}
+          >
             {decrypted.map((charObj, index) =>
               charObj.replaced === "\n" ? (
                 <br key={index} />
               ) : (
-                <span key={index} style={{ color: charObj.isReplaced ? "black" : "red" }}>
+                <span
+                  key={index}
+                  style={{ color: charObj.isReplaced ? "black" : "red" }}
+                >
                   {charObj.replaced === " " ? "\u00A0" : charObj.replaced}
                 </span>
               )

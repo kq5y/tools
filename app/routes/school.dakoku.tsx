@@ -29,7 +29,9 @@ export default function Dakoku() {
     setNameRowWidth(tableNameRow.clientWidth);
   };
   useEffect(() => {
-    const savedData = JSON.parse(localStorage.getItem("attendanceData") || '{"lectures": []}');
+    const savedData = JSON.parse(
+      localStorage.getItem("attendanceData") || '{"lectures": []}'
+    );
     setData(savedData);
   }, []);
   const saveToLocalStorage = (data: SaveData) => {
@@ -41,7 +43,10 @@ export default function Dakoku() {
       name: addLectureName,
       attendances: [...Array(addLectureTimes).fill([...Array(15).fill("-")])],
     };
-    setData((prevData) => ({ ...prevData, lectures: [...prevData.lectures, newLecture] }));
+    setData((prevData) => ({
+      ...prevData,
+      lectures: [...prevData.lectures, newLecture],
+    }));
     saveToLocalStorage({ ...data, lectures: [...data.lectures, newLecture] });
     setAddLectureName("");
   };
@@ -75,10 +80,17 @@ export default function Dakoku() {
   };
   const attendanceSummary = useMemo(() => {
     return data.lectures.map((lecture) => {
-      const attended = lecture.attendances.flat().filter((status) => status === "o").length;
-      const absent = lecture.attendances.flat().filter((status) => status === "x").length;
-      const totalClasses = lecture.attendances.flat().filter((status) => status !== "~").length;
-      const attendanceRate = totalClasses > 0 ? (attended / totalClasses) * 100 : 0;
+      const attended = lecture.attendances
+        .flat()
+        .filter((status) => status === "o").length;
+      const absent = lecture.attendances
+        .flat()
+        .filter((status) => status === "x").length;
+      const totalClasses = lecture.attendances
+        .flat()
+        .filter((status) => status !== "~").length;
+      const attendanceRate =
+        totalClasses > 0 ? (attended / totalClasses) * 100 : 0;
       return {
         name: lecture.name,
         attended,
@@ -102,7 +114,10 @@ export default function Dakoku() {
           <table className="min-w-full text-sm bg-white rounded-lg shadow-md border-separate border-spacing-0 table-fixed">
             <thead>
               <tr className="text-base">
-                <th ref={tableNameRowRef} className="sticky left-0 bg-white px-4 py-2 text-left">
+                <th
+                  ref={tableNameRowRef}
+                  className="sticky left-0 bg-white px-4 py-2 text-left"
+                >
                   Name
                 </th>
                 <th
@@ -120,26 +135,39 @@ export default function Dakoku() {
             <tbody>
               {data.lectures.map((lecture, lectureIndex) =>
                 lecture.attendances.map((att, times) => (
-                  <tr key={lectureIndex * 10 + times} className="hover:bg-gray-50">
+                  <tr
+                    key={lectureIndex * 10 + times}
+                    className="hover:bg-gray-50"
+                  >
                     {times == 0 && (
                       <td
                         rowSpan={lecture.attendances.length}
                         colSpan={lecture.attendances.length >= 2 ? 1 : 2}
                         className={
                           "sticky left-0 bg-white px-4 py-2 " +
-                          (lecture.attendances.length >= 2 ? "w-[100px]" : "w-[140px]")
+                          (lecture.attendances.length >= 2
+                            ? "w-[100px]"
+                            : "w-[140px]")
                         }
                       >
                         {lecture.name}
                       </td>
                     )}
                     {lecture.attendances.length >= 2 && (
-                      <td className="sticky bg-white px-4 py-2" style={{ left: nameRowWidth }}>
+                      <td
+                        className="sticky bg-white px-4 py-2"
+                        style={{ left: nameRowWidth }}
+                      >
                         {times + 1}
                       </td>
                     )}
                     {att.map((status, i) => (
-                      <td key={i} className={"px-4 py-2 text-center " + status2bgColor(status)}>
+                      <td
+                        key={i}
+                        className={
+                          "px-4 py-2 text-center " + status2bgColor(status)
+                        }
+                      >
                         <select
                           value={status}
                           onChange={(e) =>
@@ -213,21 +241,35 @@ export default function Dakoku() {
           <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
             <thead>
               <tr className="bg-gray-100">
-                <th className="border border-gray-300 px-4 py-2 text-left">Name</th>
-                <th className="border border-gray-300 px-4 py-2 text-center">Attended</th>
-                <th className="border border-gray-300 px-4 py-2 text-center">Absent</th>
-                <th className="border border-gray-300 px-4 py-2 text-center">Total</th>
-                <th className="border border-gray-300 px-4 py-2 text-center">Rate</th>
+                <th className="border border-gray-300 px-4 py-2 text-left">
+                  Name
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-center">
+                  Attended
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-center">
+                  Absent
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-center">
+                  Total
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-center">
+                  Rate
+                </th>
               </tr>
             </thead>
             <tbody>
               {attendanceSummary.map((summary, index) => (
                 <tr key={index} className="border-b hover:bg-gray-50">
-                  <td className="border border-gray-300 px-4 py-2">{summary.name}</td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {summary.name}
+                  </td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     {summary.attended}
                   </td>
-                  <td className="border border-gray-300 px-4 py-2 text-center">{summary.absent}</td>
+                  <td className="border border-gray-300 px-4 py-2 text-center">
+                    {summary.absent}
+                  </td>
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     {summary.totalClasses}
                   </td>

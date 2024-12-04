@@ -4,7 +4,10 @@ import { useMemo, useState } from "react";
 export const meta: MetaFunction = () => {
   return [
     { title: "/crypto/vigenere" },
-    { name: "description", content: "Vigenere Cipher Encryption and Decryption" },
+    {
+      name: "description",
+      content: "Vigenere Cipher Encryption and Decryption",
+    },
   ];
 };
 
@@ -19,7 +22,8 @@ const vigenereEncrypt = (text: string, key: string): string => {
         const keyChar = key[keyIndex % keyLength].toLowerCase();
         keyIndex++;
         return String.fromCharCode(
-          ((char.charCodeAt(0) - offset + (keyChar.charCodeAt(0) - 97)) % 26) + offset
+          ((char.charCodeAt(0) - offset + (keyChar.charCodeAt(0) - 97)) % 26) +
+            offset
         );
       }
       return char;
@@ -38,7 +42,9 @@ const vigenereDecrypt = (text: string, key: string): string => {
         const keyChar = key[keyIndex % keyLength].toLowerCase();
         keyIndex++;
         return String.fromCharCode(
-          ((char.charCodeAt(0) - offset - (keyChar.charCodeAt(0) - 97) + 26) % 26) + offset
+          ((char.charCodeAt(0) - offset - (keyChar.charCodeAt(0) - 97) + 26) %
+            26) +
+            offset
         );
       }
       return char;

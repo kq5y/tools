@@ -13,9 +13,13 @@ const caesarShift = (text: string, shift: number) => {
     .split("")
     .map((char) => {
       if (/[a-z]/.test(char)) {
-        return String.fromCharCode(((char.charCodeAt(0) - 97 + shift) % 26) + 97);
+        return String.fromCharCode(
+          ((char.charCodeAt(0) - 97 + shift) % 26) + 97
+        );
       } else if (/[A-Z]/.test(char)) {
-        return String.fromCharCode(((char.charCodeAt(0) - 65 + shift) % 26) + 65);
+        return String.fromCharCode(
+          ((char.charCodeAt(0) - 65 + shift) % 26) + 65
+        );
       } else {
         return char;
       }
@@ -25,7 +29,9 @@ const caesarShift = (text: string, shift: number) => {
 
 export default function Caesar() {
   const [targetText, setTargetText] = useState("");
-  const [results, setResults] = useState<{ shift: number; shiftedText: string }[]>([]);
+  const [results, setResults] = useState<
+    { shift: number; shiftedText: string }[]
+  >([]);
   const handleEncrypt = () => {
     const shiftedResults = Array.from({ length: 26 }, (_, i) => ({
       shift: i + 1,
@@ -65,7 +71,9 @@ export default function Caesar() {
               <tbody>
                 {results.map((result) => (
                   <tr key={result.shift}>
-                    <td className="border border-gray-300 p-2 text-center">{result.shift}</td>
+                    <td className="border border-gray-300 p-2 text-center">
+                      {result.shift}
+                    </td>
                     <td className="border border-gray-300 p-2">
                       <textarea
                         className="w-full p-2 border border-gray-300 rounded resize-none"

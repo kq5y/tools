@@ -4,7 +4,10 @@ import { useMemo, useState } from "react";
 export const meta: MetaFunction = () => {
   return [
     { title: "/crypto/rail-fence" },
-    { name: "description", content: "Rail-Fence Cipher Encryption and Decryption" },
+    {
+      name: "description",
+      content: "Rail-Fence Cipher Encryption and Decryption",
+    },
   ];
 };
 
@@ -23,7 +26,9 @@ const railFenceEncrypt = (text: string, rails: number): string => {
 
 const railFenceDecrypt = (cipherText: string, rails: number): string => {
   if (rails <= 1) return cipherText;
-  const rail = Array.from({ length: rails }, () => Array(cipherText.length).fill(null));
+  const rail = Array.from({ length: rails }, () =>
+    Array(cipherText.length).fill(null)
+  );
   let directionDown = false;
   let row = 0;
   for (let i = 0; i < cipherText.length; i++) {
