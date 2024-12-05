@@ -1,3 +1,4 @@
+import elkLayouts from "@mermaid-js/layout-elk";
 import type { MetaFunction } from "@remix-run/cloudflare";
 import mermaid from "mermaid";
 import {
@@ -12,7 +13,7 @@ import {
 export const meta: MetaFunction = () => {
   return [
     { title: "/automata/simplest" },
-    { name: "description", content: "Generate the simplest automaton" },
+    { name: "description", content: "Convert the DFA to the simplest DFA" },
   ];
 };
 
@@ -334,14 +335,19 @@ export default function Simplest() {
     setEditorMode("table");
   }, [textEditorString]);
   useEffect(() => {
+    mermaid.registerLayoutLoaders(elkLayouts);
     mermaid.initialize({
       startOnLoad: false,
-      flowchart: { defaultRenderer: "elk" },
+      layout: "elk",
+      elk: {
+        nodePlacementStrategy: "NETWORK_SIMPLEX",
+        cycleBreakingStrategy: "MODEL_ORDER",
+      },
     });
   }, []);
   return (
     <div>
-      <h1 className="text-2xl font-bold">Simplest Automata</h1>
+      <h1 className="text-2xl font-bold">Simplest DFA</h1>
       <div className="mb-2 border-b border-gray-200">
         <ul className="flex flex-wrap text-center">
           <li className="me-2">

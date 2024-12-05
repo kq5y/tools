@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@mermaid-js/layout-elk':
+        specifier: ^0.1.7
+        version: 0.1.7(mermaid@11.4.1)
       '@remix-run/cloudflare':
         specifier: ^2.15.0
         version: 2.15.0(@cloudflare/workers-types@4.20241202.0)(typescript@5.7.2)
@@ -788,6 +791,11 @@ packages:
 
   '@mdx-js/mdx@2.3.0':
     resolution: {integrity: sha512-jLuwRlz8DQfQNiUCJR50Y09CGPq3fLtmtUQfVrj79E0JWu3dvsVcxVIcfhR5h0iXu+/z++zDrYeiJqifRynJkA==}
+
+  '@mermaid-js/layout-elk@0.1.7':
+    resolution: {integrity: sha512-G3AJ2jMaCAqky2CT3z/sf3pK5UuS3tne98GsXDl3PkKByCmPmOYmJPf+6oX5PUlV3HNWWHuSgtZ9NU/CZDSuHQ==}
+    peerDependencies:
+      mermaid: ^11.0.0
 
   '@mermaid-js/parser@0.3.0':
     resolution: {integrity: sha512-HsvL6zgE5sUPGgkIDlmAWR1HTNHz2Iy11BAWPTa4Jjabkpguy4Ze2gzfLrg6pdRuBvFwgUYyxiaNqZwrEEXepA==}
@@ -1696,6 +1704,9 @@ packages:
 
   electron-to-chromium@1.5.68:
     resolution: {integrity: sha512-FgMdJlma0OzUYlbrtZ4AeXjKxKPk6KT8WOP8BjcqxWtlg8qyJQjRzPJzUtUn5GBg1oQ26hFs7HOOHJMYiJRnvQ==}
+
+  elkjs@0.9.3:
+    resolution: {integrity: sha512-f/ZeWvW/BCXbhGEf1Ujp29EASo/lk1FDnETgNKwJrsVvGZhUWCZyg3xLJjAsxfOmt8KjswHmI5EwCQcPMpOYhQ==}
 
   emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -4028,6 +4039,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@mermaid-js/layout-elk@0.1.7(mermaid@11.4.1)':
+    dependencies:
+      d3: 7.9.0
+      elkjs: 0.9.3
+      mermaid: 11.4.1
+
   '@mermaid-js/parser@0.3.0':
     dependencies:
       langium: 3.0.0
@@ -5048,6 +5065,8 @@ snapshots:
   ee-first@1.1.1: {}
 
   electron-to-chromium@1.5.68: {}
+
+  elkjs@0.9.3: {}
 
   emoji-regex@8.0.0: {}
 

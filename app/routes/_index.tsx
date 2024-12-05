@@ -41,7 +41,7 @@ const roots: ToolRoot[] = [
   {
     cat: "automata",
     title: "simplest",
-    desc: "Generate the simplest automaton",
+    desc: "Convert the DFA to the simplest DFA",
   },
 ];
 
