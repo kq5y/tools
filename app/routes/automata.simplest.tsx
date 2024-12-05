@@ -560,7 +560,7 @@ export default function Simplest() {
       </div>
       <div className="flex flex-col">
         {equivalentGroupConverts.map((conv, idx) => (
-          <span>
+          <span key={idx}>
             P{idx} = {conv}
           </span>
         ))}

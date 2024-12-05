@@ -12,3 +12,5 @@ Implementing various tools using remix.
   - vigenere
 - school
   - dakoku
+- automata
+  - simplest
