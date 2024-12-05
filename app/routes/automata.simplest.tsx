@@ -33,7 +33,7 @@ export default function Simplest() {
   const [equivalentGroupConverts, setEquivalentGroupConverts] = useState<
     string[]
   >([]);
-  const [outputKeys] = useState<string[]>(["a", "b"]);
+  const [outputKeys, setOutputKeys] = useState<string[]>(["a", "b"]);
   const [transitions, setTransitions] = useState<Transition[]>([
     {
       id: 0,
@@ -69,7 +69,7 @@ export default function Simplest() {
     if (finalCount <= 0) return false;
     if (targetNodes.difference(nodes).size > 0) return false;
     return true;
-  }, [transitions]);
+  }, [transitions, outputKeys]);
   const getMermaidFromTransitions = (trans: Transition[]) => {
     let res = "graph LR;\nstyle start fill:none, stroke:none;\nstart(( ));\n";
     let initialId = -1;
@@ -95,7 +95,7 @@ export default function Simplest() {
   };
   const getPreviewAutomataMermaid = useCallback(() => {
     return getMermaidFromTransitions(transitions);
-  }, [transitions]);
+  }, [transitions, outputKeys]);
   const getPreviewSimplestAutomataMermaid = useCallback(() => {
     const simplestTransitions: Transition[] = [];
     const groupStrings: string[] = [];
@@ -176,7 +176,7 @@ export default function Simplest() {
       });
     }
     return getMermaidFromTransitions(simplestTransitions);
-  }, [transitions]);
+  }, [transitions, outputKeys]);
   const onTranNodeChange = (
     ev: ChangeEvent<HTMLInputElement>,
     target: number
@@ -259,6 +259,16 @@ export default function Simplest() {
       },
     ]);
   };
+  const addOutput = () => {
+    const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+    const remaining = alphabet.filter((letter) => !outputKeys.includes(letter));
+    if (remaining.length > 0) {
+      setOutputKeys([...outputKeys, remaining[0]]);
+    }
+  };
+  const deleteOutput = (delkey: string) => {
+    setOutputKeys(outputKeys.filter((key) => key !== delkey));
+  };
   const deleteTransition = (id: number) => {
     setTransitions(
       transitions.reduce((acc, tran) => {
@@ -288,7 +298,7 @@ export default function Simplest() {
       res += outputKeys.map((key) => tran.outputs[key]).join("|") + "|\n";
     }
     setTextEditorString(res);
-  }, [transitions]);
+  }, [transitions, outputKeys]);
   const textEditorApplicable = useMemo(() => {
     const rows = textEditorString.trim().split("\n");
     if (rows.length <= 2) return false;
@@ -315,7 +325,7 @@ export default function Simplest() {
       ids.add(Number(columns[0]));
     }
     return true;
-  }, [textEditorString]);
+  }, [textEditorString, outputKeys]);
   const applyTextEditor = useCallback(() => {
     const newTransitions: Transition[] = [];
     const rows = textEditorString.trim().split("\n");
@@ -340,7 +350,7 @@ export default function Simplest() {
     }
     setTransitions(newTransitions);
     setEditorMode("table");
-  }, [textEditorString]);
+  }, [textEditorString, outputKeys]);
   useEffect(() => {
     mermaid.registerLayoutLoaders(elkLayouts);
     mermaid.initialize({
@@ -417,9 +427,20 @@ export default function Simplest() {
                 <tr className="bg-gray-100">
                   <th className="border border-gray-300 px-4 py-2">q0</th>
                   <th className="border border-gray-300 px-4 py-2">F</th>
-                  {outputKeys.map((key) => (
-                    <th className="border border-gray-300 px-4 py-2" key={key}>
+                  {outputKeys.map((key, idx) => (
+                    <th
+                      className="border border-gray-300 px-4 py-2 relative"
+                      key={key}
+                    >
                       {key}
+                      {idx >= 2 && (
+                        <button
+                          className="absolute right-3 inset-y-0 font-bold text-2xl text-red-600 hover:text-red-800 transition"
+                          onClick={() => deleteOutput(key)}
+                        >
+                          x
+                        </button>
+                      )}
                     </th>
                   ))}
                 </tr>
@@ -485,6 +506,12 @@ export default function Simplest() {
               onClick={addTransition}
             >
               Add Transition
+            </button>
+            <button
+              className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
+              onClick={addOutput}
+            >
+              Add Output
             </button>
             <button
               className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 disabled:bg-indigo-300 disabled:cursor-not-allowed"
