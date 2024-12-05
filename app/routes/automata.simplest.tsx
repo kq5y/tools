@@ -30,6 +30,9 @@ export default function Simplest() {
   const [textEditorString, setTextEditorString] = useState("");
   const previewAutomataRef = useRef<HTMLPreElement>(null);
   const previewSimplestAutomataRef = useRef<HTMLPreElement>(null);
+  const [equivalentGroupConverts, setEquivalentGroupConverts] = useState<
+    string[]
+  >([]);
   const [outputKeys] = useState<string[]>(["a", "b"]);
   const [transitions, setTransitions] = useState<Transition[]>([
     {
@@ -95,6 +98,7 @@ export default function Simplest() {
   }, [transitions]);
   const getPreviewSimplestAutomataMermaid = useCallback(() => {
     const simplestTransitions: Transition[] = [];
+    const groupStrings: string[] = [];
     const nodesById: { [key: number]: Transition } = {};
     const nodesByName: { [key: string]: number } = {};
     let equivalentGroups: number[][] = [[], []];
@@ -104,6 +108,7 @@ export default function Simplest() {
       if (tran.final) equivalentGroups[1].push(tran.id);
       else equivalentGroups[0].push(tran.id);
     }
+    groupStrings.push(JSON.stringify(equivalentGroups));
     while (true) {
       let newGroups: number[][] = [];
       for (const group of equivalentGroups) {
@@ -131,6 +136,7 @@ export default function Simplest() {
         }
         newGroups = [...newGroups, ...Object.values(newGroup)];
       }
+      groupStrings.push(JSON.stringify(newGroups));
       if (
         equivalentGroups.length === newGroups.length &&
         newGroups.every((group, i) =>
@@ -140,6 +146,7 @@ export default function Simplest() {
         break;
       equivalentGroups = newGroups;
     }
+    setEquivalentGroupConverts(groupStrings);
     for (let groupIdx = 0; groupIdx < equivalentGroups.length; groupIdx++) {
       simplestTransitions.push({
         id: groupIdx,
@@ -523,6 +530,13 @@ export default function Simplest() {
             />
           </div>
         </div>
+      </div>
+      <div className="flex flex-col">
+        {equivalentGroupConverts.map((conv, idx) => (
+          <span>
+            P{idx} = {conv}
+          </span>
+        ))}
       </div>
     </div>
   );
