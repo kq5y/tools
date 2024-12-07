@@ -2,7 +2,11 @@ import elkLayouts from "@mermaid-js/layout-elk";
 import type { MetaFunction } from "@remix-run/cloudflare";
 import mermaid from "mermaid";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { type Transition, useTransitionTable } from "~/components/automata";
+import {
+  type Transition,
+  TransitionTable,
+  useTransitionTable,
+} from "~/components/automata";
 import { getMermaidFromTransitions } from "~/components/automata/utils";
 
 export const meta: MetaFunction = () => {
@@ -18,8 +22,14 @@ export default function Simplest() {
   const [equivalentGroupConverts, setEquivalentGroupConverts] = useState<
     string[]
   >([]);
-  const { TransitionTable, transitions, outputKeys } =
-    useTransitionTable(false);
+  const {
+    transitions,
+    setTransitions,
+    outputKeys,
+    setOutputKeys,
+    nodesById,
+    isNFA,
+  } = useTransitionTable(false);
   const simplestGeneratable = useMemo(() => {
     const nodes = new Set<string>();
     const nodeIds = new Set<number>();
@@ -153,7 +163,14 @@ export default function Simplest() {
   return (
     <div>
       <h1 className="text-2xl font-bold">Simplest DFA</h1>
-      <TransitionTable>
+      <TransitionTable
+        transitions={transitions}
+        setTransitions={setTransitions}
+        outputKeys={outputKeys}
+        setOutputKeys={setOutputKeys}
+        nodesById={nodesById}
+        isNFA={isNFA}
+      >
         <button
           className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 disabled:bg-indigo-300 disabled:cursor-not-allowed"
           onClick={generateSimplest}
