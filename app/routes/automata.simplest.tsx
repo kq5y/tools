@@ -43,7 +43,7 @@ export default function Simplest() {
       nodes.add(tran.node);
       nodeIds.add(tran.id);
       for (const key of outputKeys) {
-        if (tran.outputs[key].length !== 1) return false;
+        if ((tran.outputs[key] || []).length !== 1) return false;
         targetNodeIds.add(tran.outputs[key][0]);
       }
     }

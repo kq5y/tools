@@ -184,7 +184,7 @@ export default function TransitionTable({
       transitions.reduce((acc, tran) => {
         tran.outputs = outputKeys.reduce(
           (acc, key) => {
-            acc[key] = tran.outputs[key].filter((nid) => id !== nid);
+            acc[key] = (tran.outputs[key] || []).filter((nid) => id !== nid);
             return acc;
           },
           {} as { [key: string]: number[] }
