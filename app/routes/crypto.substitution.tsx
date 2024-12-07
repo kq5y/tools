@@ -1,11 +1,9 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { useMemo, useState } from "react";
+import { getMeta } from "~/routes";
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "/crypto/substitution" },
-    { name: "description", content: "Helping to decipher substitutions" },
-  ];
+  return getMeta("crypto", "substitution");
 };
 
 export default function Substitution() {

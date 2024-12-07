@@ -5,12 +5,10 @@ import {
   TransitionTable,
   useTransitionTable,
 } from "~/components/automata";
+import { getMeta } from "~/routes";
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "/automata/typst" },
-    { name: "description", content: "Convert to automata notation on Typst" },
-  ];
+  return getMeta("automata", "typst");
 };
 
 export default function Typst() {

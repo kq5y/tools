@@ -1,11 +1,9 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { useState } from "react";
+import { getMeta } from "~/routes";
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "/crypto/morse" },
-    { name: "description", content: "Morse Code Encryption and Decryption" },
-  ];
+  return getMeta("crypto", "morse");
 };
 
 const morseCodeMap: Record<string, string> = {

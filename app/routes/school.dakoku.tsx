@@ -1,11 +1,9 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { useEffect, useMemo, useState } from "react";
+import { getMeta } from "~/routes";
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "/school/dakoku" },
-    { name: "description", content: "Lecture attendance management" },
-  ];
+  return getMeta("school", "dakoku");
 };
 
 type AttendanceStatus = "o" | "x" | "-" | "~";

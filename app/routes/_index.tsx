@@ -1,54 +1,6 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { Link } from "@remix-run/react";
-
-interface ToolRoot {
-  cat: string;
-  title: string;
-  desc: string;
-}
-
-const roots: ToolRoot[] = [
-  {
-    cat: "crypto",
-    title: "caesar",
-    desc: "Caesar Cipher Encryption and Decryption",
-  },
-  {
-    cat: "crypto",
-    title: "vigenere",
-    desc: "Vigenere Cipher Encryption and Decryption",
-  },
-  {
-    cat: "crypto",
-    title: "rail-fence",
-    desc: "Rail-Fence Cipher Encryption and Decryption",
-  },
-  {
-    cat: "crypto",
-    title: "substitution",
-    desc: "Helping to decipher substitutions",
-  },
-  {
-    cat: "crypto",
-    title: "morse",
-    desc: "Morse Code Encryption and Decryption",
-  },
-  {
-    cat: "school",
-    title: "dakoku",
-    desc: "Lecture attendance management",
-  },
-  {
-    cat: "automata",
-    title: "simplest",
-    desc: "Convert the DFA to the simplest DFA",
-  },
-  {
-    cat: "automata",
-    title: "typst",
-    desc: "Convert to automata notation on Typst",
-  },
-];
+import { type ToolRoot, routes } from "~/routes";
 
 export const meta: MetaFunction = () => {
   return [
@@ -58,7 +10,7 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  const rootmap = roots.reduce(
+  const rootmap = routes.reduce(
     (m, r) => {
       if (!m[r.cat]) m[r.cat] = [];
       m[r.cat].push(r);

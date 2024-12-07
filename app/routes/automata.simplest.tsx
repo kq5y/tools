@@ -8,12 +8,10 @@ import {
   useTransitionTable,
 } from "~/components/automata";
 import { getMermaidFromTransitions } from "~/components/automata/utils";
+import { getMeta } from "~/routes";
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "/automata/simplest" },
-    { name: "description", content: "Convert the DFA to the simplest DFA" },
-  ];
+  return getMeta("automata", "simplest");
 };
 
 export default function Simplest() {

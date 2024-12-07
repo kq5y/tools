@@ -1,14 +1,9 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { useMemo, useState } from "react";
+import { getMeta } from "~/routes";
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "/crypto/rail-fence" },
-    {
-      name: "description",
-      content: "Rail-Fence Cipher Encryption and Decryption",
-    },
-  ];
+  return getMeta("crypto", "rail-fence");
 };
 
 const railFenceEncrypt = (text: string, rails: number): string => {

@@ -1,11 +1,9 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { useState } from "react";
+import { getMeta } from "~/routes";
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "/crypto/caesar" },
-    { name: "description", content: "Caesar Cipher Encryption and Decryption" },
-  ];
+  return getMeta("crypto", "caesar");
 };
 
 const caesarShift = (text: string, shift: number) => {

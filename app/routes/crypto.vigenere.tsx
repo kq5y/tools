@@ -1,14 +1,9 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { useMemo, useState } from "react";
+import { getMeta } from "~/routes";
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "/crypto/vigenere" },
-    {
-      name: "description",
-      content: "Vigenere Cipher Encryption and Decryption",
-    },
-  ];
+  return getMeta("crypto", "vigenere");
 };
 
 const vigenereEncrypt = (text: string, key: string): string => {
