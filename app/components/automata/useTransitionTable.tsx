@@ -1,18 +1,36 @@
-import { type ReactNode, useState } from "react";
-import TransitionTable from "./TransitionTable";
-import { Transition } from "./types";
+import { type Dispatch, type SetStateAction, useMemo, useState } from "react";
+import { type Transition } from "./types";
 
-export default function useTransitionTable(isNFA: boolean = false) {
-  const [outputKeys, setOutputKeys] = useState<string[]>(
-    isNFA ? ["ε", "a", "b"] : ["a", "b"]
-  );
-  const [transitions, setTransitions] = useState<Transition[]>([
+interface TransitionTableReturn {
+  transitions: Transition[];
+  setTransitions: Dispatch<SetStateAction<Transition[]>>;
+  nodesById: {
+    [key: number]: Transition;
+  };
+  outputKeys: string[];
+  setOutputKeys: (vals: string[]) => void;
+  isNFA: boolean;
+  setIsNFA: (val: boolean) => void;
+}
+
+export default function useTransitionTable(
+  defaultIsNFA: boolean = false
+): TransitionTableReturn {
+  const [isNFA, _setIsNFA] = useState<boolean>(defaultIsNFA);
+  const [outputKeys, setOutputKeys] = useState<string[]>(["a", "b"]);
+  const fullOutputKeys = useMemo(() => {
+    return [...(isNFA ? ["ε"] : []), ...outputKeys];
+  }, [outputKeys, isNFA]);
+  const setFullOutputKeys = (vals: string[]) => {
+    setOutputKeys(vals.filter((val) => !isNFA || val !== "ε"));
+  };
+  const defaultTransitions = [
     {
       id: 0,
-      node: "",
+      node: "q_0",
       initial: true,
       final: false,
-      outputs: outputKeys.reduce(
+      outputs: fullOutputKeys.reduce(
         (acc, key) => {
           acc[key] = [];
           return acc;
@@ -20,24 +38,36 @@ export default function useTransitionTable(isNFA: boolean = false) {
         {} as { [key: string]: number[] }
       ),
     },
-  ]);
-  const element = (props: { children?: ReactNode }) => {
-    return (
-      <TransitionTable
-        transitions={transitions}
-        setTransitions={setTransitions}
-        outputKeys={outputKeys}
-        setOutputKeys={setOutputKeys}
-        isNFA={isNFA}
-        additionalButtonElement={props.children}
-      />
-    );
+  ];
+  const setIsNFA = (val: boolean) => {
+    if (val !== isNFA) {
+      if (isNFA) {
+        if (!confirm("Transitions will be reset.")) {
+          return;
+        }
+        setTransitions(defaultTransitions);
+      }
+      _setIsNFA(val);
+    }
   };
+  const [transitions, setTransitions] =
+    useState<Transition[]>(defaultTransitions);
+  const nodesById = useMemo(() => {
+    return transitions.reduce(
+      (acc, tran) => {
+        acc[tran.id] = tran;
+        return acc;
+      },
+      {} as { [key: number]: Transition }
+    );
+  }, [transitions]);
   return {
-    TransitionTable: element,
     transitions,
     setTransitions,
-    outputKeys,
-    setOutputKeys,
+    nodesById,
+    outputKeys: fullOutputKeys,
+    setOutputKeys: setFullOutputKeys,
+    isNFA,
+    setIsNFA,
   };
 }

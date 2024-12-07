@@ -2,32 +2,38 @@ import {
   type ChangeEvent,
   type Dispatch,
   type ReactNode,
-  type SetStateAction,
   useCallback,
+  useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import type { EditorModeType, FocusConfig, Transition } from "./types";
 
 interface Props {
   transitions: Transition[];
-  setTransitions: Dispatch<SetStateAction<Transition[]>>;
+  setTransitions: Dispatch<Transition[]>;
+  nodesById: { [key: number]: Transition };
   outputKeys: string[];
-  setOutputKeys: Dispatch<SetStateAction<string[]>>;
+  setOutputKeys: Dispatch<string[]>;
   isNFA: boolean;
-  additionalButtonElement?: ReactNode;
+  readOnly?: boolean;
+  children?: ReactNode;
 }
 
 export default function TransitionTable({
   transitions,
   setTransitions,
+  nodesById,
   outputKeys,
   setOutputKeys,
   isNFA,
-  additionalButtonElement,
+  readOnly = false,
+  children = undefined,
 }: Props) {
   const [editorMode, setEditorMode] = useState<EditorModeType>("table");
   const [textEditorString, setTextEditorString] = useState("");
+  const focusAreaRef = useRef<HTMLDivElement | null>(null);
   const [focusConfig, setFocusConfig] = useState<FocusConfig>({
     open: false,
     index: 0,
@@ -89,6 +95,7 @@ export default function TransitionTable({
     key: string = "",
     el: HTMLInputElement | null = null
   ) => {
+    if (readOnly) return;
     if (el) {
       const rect = el.getBoundingClientRect();
       setFocusConfig({
@@ -149,7 +156,7 @@ export default function TransitionTable({
       ...transitions,
       {
         id: lastTransitionId + 1,
-        node: "",
+        node: `q_${lastTransitionId + 1}`,
         initial: false,
         final: false,
         outputs: outputKeys.reduce(
@@ -262,6 +269,27 @@ export default function TransitionTable({
     setTransitions(newTransitions);
     setEditorMode("table");
   }, [textEditorString, outputKeys]);
+  const getNodes = (outputs: number[]) => {
+    return outputs.map((val) => nodesById[val].node);
+  };
+  const handleClickFocusOutside = (ev: MouseEvent) => {
+    if (
+      focusAreaRef.current &&
+      !focusAreaRef.current.contains(ev.target as HTMLElement)
+    ) {
+      onOutputFocusChange(false);
+    }
+  };
+  useEffect(() => {
+    if (focusConfig.open) {
+      document.addEventListener("mousedown", handleClickFocusOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickFocusOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickFocusOutside);
+    };
+  }, [focusConfig]);
   return (
     <div>
       <div className="mb-2 border-b border-gray-200">
@@ -336,6 +364,7 @@ export default function TransitionTable({
                         <button
                           className="absolute right-3 inset-y-0 font-bold text-2xl text-red-600 hover:text-red-800 transition"
                           onClick={() => deleteOutput(key)}
+                          disabled={readOnly}
                         >
                           x
                         </button>
@@ -357,6 +386,7 @@ export default function TransitionTable({
                         value={tran.node}
                         onFocus={(ev) => ev.target.select()}
                         onChange={(ev) => onTranNodeChange(ev, index)}
+                        disabled={readOnly}
                       />
                     </td>
                     <td className="border border-gray-300 text-center">
@@ -364,6 +394,7 @@ export default function TransitionTable({
                         type="checkbox"
                         checked={tran.initial}
                         onChange={(ev) => onTranInitialChange(ev, index)}
+                        disabled={readOnly}
                       />
                     </td>
                     <td className="border border-gray-300 text-center">
@@ -371,6 +402,7 @@ export default function TransitionTable({
                         type="checkbox"
                         checked={tran.final}
                         onChange={(ev) => onTranFinalChange(ev, index)}
+                        disabled={readOnly}
                       />
                     </td>
                     {outputKeys.map((key) => (
@@ -378,8 +410,9 @@ export default function TransitionTable({
                         <input
                           className="px-4 py-2 w-32"
                           type="text"
-                          value={(tran.outputs[key] || []).join(",")}
+                          value={getNodes(tran.outputs[key] || []).join(",")}
                           readOnly
+                          disabled={readOnly}
                           onFocus={(ev) =>
                             onOutputFocusChange(true, index, key, ev.target)
                           }
@@ -391,6 +424,7 @@ export default function TransitionTable({
                         <button
                           className="font-bold text-2xl text-red-600 hover:text-red-800 transition"
                           onClick={() => deleteTransition(tran.id)}
+                          disabled={readOnly}
                         >
                           x
                         </button>
@@ -403,49 +437,56 @@ export default function TransitionTable({
           </div>
           {focusConfig.open && (
             <div>
-              <div
-                className="fixed top-0 left-0 w-full h-full z-10"
-                onClick={() => onOutputFocusChange(false)}
-              />
-              <div
-                className="absolute px-4 py-2 bg-white border border-gray-300 rounded shadow-md z-20 min-w-32"
-                style={{ top: focusConfig.top, left: focusConfig.left }}
-              >
-                <ul>
-                  {transitions.map((otran) => (
-                    <li className="flex gap-2" key={otran.id}>
-                      <input
-                        type="checkbox"
-                        checked={(
-                          transitions[focusConfig.index].outputs[
-                            focusConfig.key
-                          ] || []
-                        ).includes(otran.id)}
-                        onChange={() => onOutputChange(otran.id)}
-                      />
-                      <label className="flex-1">
-                        {otran.id}: {otran.node}
-                      </label>
-                    </li>
-                  ))}
-                </ul>
+              <div className="fixed top-0 left-0 w-full h-full z-10">
+                <div
+                  className="absolute px-4 py-2 bg-white border border-gray-300 rounded shadow-md z-20 min-w-32"
+                  style={{ top: focusConfig.top, left: focusConfig.left }}
+                  ref={focusAreaRef}
+                >
+                  <ul>
+                    {transitions.map((otran) => (
+                      <li className="flex gap-2" key={otran.id}>
+                        <input
+                          type="checkbox"
+                          id={`focusCheckbox${otran.id}`}
+                          checked={(
+                            transitions[focusConfig.index].outputs[
+                              focusConfig.key
+                            ] || []
+                          ).includes(otran.id)}
+                          onChange={() => onOutputChange(otran.id)}
+                        />
+                        <label
+                          className="flex-1"
+                          htmlFor={`focusCheckbox${otran.id}`}
+                        >
+                          {otran.id}: {otran.node}
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
           )}
           <div className="flex gap-2">
-            <button
-              className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
-              onClick={addTransition}
-            >
-              Add Transition
-            </button>
-            <button
-              className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
-              onClick={addOutput}
-            >
-              Add Output
-            </button>
-            {additionalButtonElement}
+            {!readOnly && (
+              <>
+                <button
+                  className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
+                  onClick={addTransition}
+                >
+                  Add Transition
+                </button>
+                <button
+                  className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
+                  onClick={addOutput}
+                >
+                  Add Output
+                </button>
+              </>
+            )}
+            {children}
           </div>
         </div>
         <div className="p-2" hidden={editorMode !== "text"}>
@@ -454,16 +495,19 @@ export default function TransitionTable({
             style={{ ["fieldSizing" as never]: "content" }}
             value={textEditorString}
             onChange={(ev) => setTextEditorString(ev.target.value)}
+            disabled={readOnly}
           />
-          <div>
-            <button
-              className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 disabled:bg-indigo-300 disabled:cursor-not-allowed"
-              onClick={applyTextEditor}
-              disabled={!textEditorApplicable}
-            >
-              Apply
-            </button>
-          </div>
+          {!readOnly && (
+            <div>
+              <button
+                className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 disabled:bg-indigo-300 disabled:cursor-not-allowed"
+                onClick={applyTextEditor}
+                disabled={!textEditorApplicable}
+              >
+                Apply
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
