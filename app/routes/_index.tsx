@@ -43,6 +43,11 @@ const roots: ToolRoot[] = [
     title: "simplest",
     desc: "Convert the DFA to the simplest DFA",
   },
+  {
+    cat: "automata",
+    title: "typst",
+    desc: "Convert to automata notation on Typst",
+  },
 ];
 
 export const meta: MetaFunction = () => {
