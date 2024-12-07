@@ -1,4 +1,4 @@
-import { Transition } from "./types";
+import type { Transition } from "./types";
 
 export const getMermaidFromTransitions = (
   trans: Transition[],
@@ -17,7 +17,7 @@ export const getMermaidFromTransitions = (
   for (const tran of trans) {
     const outputs = {} as { [key: number]: string[] };
     for (const key of outputKeys) {
-      for (const id of tran.outputs[key]) {
+      for (const id of tran.outputs[key] || []) {
         outputs[id] = outputs[id] || [];
         outputs[id].push(key);
       }

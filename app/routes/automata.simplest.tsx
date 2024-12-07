@@ -75,7 +75,7 @@ export default function Simplest() {
       for (const group of equivalentGroups) {
         const newGroup: { [key: string]: number[] } = {};
         for (const id of group) {
-          let labels = [];
+          const labels = [];
           for (const key of outputKeys) {
             for (
               let searchIdx = 0;
@@ -172,6 +172,7 @@ export default function Simplest() {
         isNFA={isNFA}
       >
         <button
+          type="button"
           className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 disabled:bg-indigo-300 disabled:cursor-not-allowed"
           onClick={generateSimplest}
           disabled={!simplestGeneratable}
@@ -199,7 +200,7 @@ export default function Simplest() {
       </div>
       <div className="flex flex-col">
         {equivalentGroupConverts.map((conv, idx) => (
-          <span key={idx}>
+          <span key={idx.toString()}>
             P{idx} = {conv}
           </span>
         ))}

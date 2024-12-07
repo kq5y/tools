@@ -38,7 +38,7 @@ export default function Dakoku() {
     localStorage.setItem("attendanceData", JSON.stringify(data));
   };
   const handleAddLecture = () => {
-    if (addLectureName.length == 0 || addLectureTimes <= 0) return;
+    if (addLectureName.length === 0 || addLectureTimes <= 0) return;
     const newLecture = {
       name: addLectureName,
       attendances: [...Array(addLectureTimes).fill([...Array(15).fill("-")])],
@@ -96,14 +96,14 @@ export default function Dakoku() {
         attended,
         absent,
         totalClasses,
-        attendanceRate: attendanceRate.toFixed(2) + "%",
+        attendanceRate: `${attendanceRate.toFixed(2)}%`,
       };
     });
   }, [data.lectures]);
   const status2bgColor = (status: AttendanceStatus) => {
-    if (status == "o") return "bg-green-200";
-    if (status == "x") return "bg-red-200";
-    if (status == "~") return "bg-gray-400";
+    if (status === "o") return "bg-green-200";
+    if (status === "x") return "bg-red-200";
+    if (status === "~") return "bg-gray-400";
     return "";
   };
   return (
@@ -123,9 +123,9 @@ export default function Dakoku() {
                 <th
                   className="sticky bg-white px-4 py-2 text-left"
                   style={{ left: nameRowWidth }}
-                ></th>
+                />
                 {Array.from({ length: 15 }, (_, i) => (
-                  <th key={i} className="px-4 py-2 text-center">
+                  <th key={i.toString()} className="px-4 py-2 text-center">
                     {i + 1}
                   </th>
                 ))}
@@ -136,19 +136,18 @@ export default function Dakoku() {
               {data.lectures.map((lecture, lectureIndex) =>
                 lecture.attendances.map((att, times) => (
                   <tr
-                    key={lectureIndex * 10 + times}
+                    key={(lectureIndex * 10 + times).toString()}
                     className="hover:bg-gray-50"
                   >
-                    {times == 0 && (
+                    {times === 0 && (
                       <td
                         rowSpan={lecture.attendances.length}
                         colSpan={lecture.attendances.length >= 2 ? 1 : 2}
-                        className={
-                          "sticky left-0 bg-white px-4 py-2 " +
-                          (lecture.attendances.length >= 2
+                        className={`sticky left-0 bg-white px-4 py-2 ${
+                          lecture.attendances.length >= 2
                             ? "w-[100px]"
-                            : "w-[140px]")
-                        }
+                            : "w-[140px]"
+                        }`}
                       >
                         {lecture.name}
                       </td>
@@ -163,10 +162,8 @@ export default function Dakoku() {
                     )}
                     {att.map((status, i) => (
                       <td
-                        key={i}
-                        className={
-                          "px-4 py-2 text-center " + status2bgColor(status)
-                        }
+                        key={i.toString()}
+                        className={`px-4 py-2 text-center ${status2bgColor(status)}`}
                       >
                         <select
                           value={status}
@@ -194,12 +191,13 @@ export default function Dakoku() {
                         </select>
                       </td>
                     ))}
-                    {times == 0 && (
+                    {times === 0 && (
                       <td
                         rowSpan={lecture.attendances.length}
                         className="sticky right-0 bg-white px-4 py-2 text-center"
                       >
                         <button
+                          type="button"
                           onClick={() => handleDeleteLecture(lectureIndex)}
                           className="font-bold text-2xl text-red-600 hover:text-red-800 transition"
                         >
@@ -231,6 +229,7 @@ export default function Dakoku() {
             onChange={(e) => setAddLectureTimes(Number(e.target.value))}
           />
           <button
+            type="button"
             onClick={handleAddLecture}
             className="bg-indigo-500 text-white px-4 rounded-r-md hover:bg-indigo-600 transition"
           >
@@ -260,7 +259,10 @@ export default function Dakoku() {
             </thead>
             <tbody>
               {attendanceSummary.map((summary, index) => (
-                <tr key={index} className="border-b hover:bg-gray-50">
+                <tr
+                  key={index.toString()}
+                  className="border-b hover:bg-gray-50"
+                >
                   <td className="border border-gray-300 px-4 py-2">
                     {summary.name}
                   </td>
@@ -283,6 +285,7 @@ export default function Dakoku() {
         </div>
         <div className="mb-2">
           <button
+            type="button"
             onClick={handleResetData}
             className="bg-rose-500 text-white px-4 py-2 rounded hover:bg-rose-600 transition"
           >

@@ -18,9 +18,9 @@ export default function Substitution() {
   };
   const letterCount = useMemo(() => {
     const count: { [key: string]: number } = {};
-    alphabet.forEach((letter) => {
+    for (const letter of alphabet) {
       count[letter] = Object.values(mapping).filter((v) => v === letter).length;
-    });
+    }
     return count;
   }, [alphabet, mapping]);
   const decrypted = useMemo(() => {
@@ -33,21 +33,18 @@ export default function Substitution() {
         replaced: isUpperCase ? mappedChar.toUpperCase() : mappedChar,
         isReplaced: Boolean(
           mapping[lowerChar] ||
-            alphabet.filter((l) => l == lowerChar).length <= 0
+            alphabet.filter((l) => l === lowerChar).length <= 0
         ),
       };
     });
   }, [alphabet, encrypted, mapping]);
   const letterFrequency = useMemo(() => {
     const frequency: { [key: string]: number } = {};
-    encrypted
-      .toLowerCase()
-      .split("")
-      .forEach((char) => {
-        if (alphabet.includes(char)) {
-          frequency[char] = (frequency[char] || 0) + 1;
-        }
-      });
+    for (const char of encrypted.toLowerCase().split("")) {
+      if (alphabet.includes(char)) {
+        frequency[char] = (frequency[char] || 0) + 1;
+      }
+    }
     return alphabet
       .map((letter) => ({
         letter,
@@ -61,10 +58,7 @@ export default function Substitution() {
       <div className="p-2">
         <div className="mb-2">
           <textarea
-            className={
-              "w-full p-2 border border-gray-300 rounded resize-none overflow-auto " +
-              (enableTextWrap ? "break-all" : "whitespace-nowrap")
-            }
+            className={`w-full p-2 border border-gray-300 rounded resize-none overflow-auto ${enableTextWrap ? "break-all" : "whitespace-nowrap"}`}
             value={encrypted}
             onChange={(e) => setEncrypted(e.target.value)}
             rows={4}
@@ -99,10 +93,10 @@ export default function Substitution() {
           >
             {decrypted.map((charObj, index) =>
               charObj.replaced === "\n" ? (
-                <br key={index} />
+                <br key={index.toString()} />
               ) : (
                 <span
-                  key={index}
+                  key={index.toString()}
                   style={{ color: charObj.isReplaced ? "black" : "red" }}
                 >
                   {charObj.replaced === " " ? "\u00A0" : charObj.replaced}

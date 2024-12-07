@@ -6,7 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import { type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import Header from "~/components/Header";
 

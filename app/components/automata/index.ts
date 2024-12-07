@@ -3,9 +3,9 @@ import type { EditorModeType, FocusConfig, Transition } from "./types";
 import useTransitionTable from "./useTransitionTable";
 
 export {
-  EditorModeType,
-  FocusConfig,
-  Transition,
+  type EditorModeType,
+  type FocusConfig,
+  type Transition,
   TransitionTable,
   useTransitionTable,
 };

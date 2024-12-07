@@ -16,13 +16,13 @@ const caesarShift = (text: string, shift: number) => {
         return String.fromCharCode(
           ((char.charCodeAt(0) - 97 + shift) % 26) + 97
         );
-      } else if (/[A-Z]/.test(char)) {
+      }
+      if (/[A-Z]/.test(char)) {
         return String.fromCharCode(
           ((char.charCodeAt(0) - 65 + shift) % 26) + 65
         );
-      } else {
-        return char;
       }
+      return char;
     })
     .join("");
 };
@@ -53,6 +53,7 @@ export default function Caesar() {
         </div>
         <div className="mb-2">
           <button
+            type="button"
             className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
             onClick={handleEncrypt}
           >

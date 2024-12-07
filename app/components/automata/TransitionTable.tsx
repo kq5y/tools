@@ -91,8 +91,8 @@ export default function TransitionTable({
   };
   const onOutputFocusChange = (
     val: boolean,
-    index: number = 0,
-    key: string = "",
+    index = 0,
+    key = "",
     el: HTMLInputElement | null = null
   ) => {
     if (readOnly) return;
@@ -195,12 +195,11 @@ export default function TransitionTable({
     );
   };
   const applyTableEditor = useCallback(() => {
-    let res = "|id|node|q0|F|" + outputKeys.join("|") + "|\n";
-    res += "|---".repeat(4 + outputKeys.length) + "|\n";
+    let res = `|id|node|q0|F|${outputKeys.join("|")}|\n`;
+    res += `${"|---".repeat(4 + outputKeys.length)}|\n`;
     for (const tran of transitions) {
       res += `|${tran.id}|${tran.node}|${tran.initial}|${tran.final}|`;
-      res +=
-        outputKeys.map((key) => tran.outputs[key].join(",")).join("|") + "|\n";
+      res += `${outputKeys.map((key) => (tran.outputs[key] || []).join(",")).join("|")}|\n`;
     }
     setTextEditorString(res);
   }, [transitions, outputKeys]);
@@ -219,7 +218,7 @@ export default function TransitionTable({
         .map((col) => col.trim())
         .slice(1, -1);
       if (columns.length !== 4 + outputKeys.length) return false;
-      if (isNaN(Number(columns[0]))) return false;
+      if (Number.isNaN(Number(columns[0]))) return false;
       if (
         ![columns[2], columns[3]].every(
           (value) => value === "true" || value === "false"
@@ -231,7 +230,7 @@ export default function TransitionTable({
           columns[j]
             .split(",")
             .filter((col) => col)
-            .some((val) => isNaN(Number(val)))
+            .some((val) => Number.isNaN(Number(val)))
         )
           return false;
       }
@@ -268,7 +267,7 @@ export default function TransitionTable({
     }
     setTransitions(newTransitions);
     setEditorMode("table");
-  }, [textEditorString, outputKeys]);
+  }, [textEditorString, outputKeys, setTransitions]);
   const getNodes = (outputs: number[]) => {
     return outputs.map((val) => nodesById[val].node);
   };
@@ -296,12 +295,12 @@ export default function TransitionTable({
         <ul className="flex flex-wrap text-center">
           <li className="me-2">
             <button
-              className={
-                "inline-block p-2 border-b-2 rounded-t-lg" +
-                (editorMode === "table"
+              type="button"
+              className={`inline-block p-2 border-b-2 rounded-t-lg${
+                editorMode === "table"
                   ? "text-indigo-600 hover:text-indigo-600 border-indigo-600"
-                  : "text-gray-500 hover:text-gray-600 border-gray-100 hover:border-gray-300")
-              }
+                  : "text-gray-500 hover:text-gray-600 border-gray-100 hover:border-gray-300"
+              }`}
               onClick={() => setEditorMode("table")}
             >
               Table
@@ -309,12 +308,12 @@ export default function TransitionTable({
           </li>
           <li className="me-2">
             <button
-              className={
-                "inline-block p-2 border-b-2 rounded-t-lg" +
-                (editorMode === "text"
+              type="button"
+              className={`inline-block p-2 border-b-2 rounded-t-lg${
+                editorMode === "text"
                   ? "text-indigo-600 hover:text-indigo-600 border-indigo-600"
-                  : "hover:text-gray-600 hover:border-gray-300")
-              }
+                  : "hover:text-gray-600 hover:border-gray-300"
+              }`}
               onClick={() => {
                 applyTableEditor();
                 setEditorMode("text");
@@ -334,7 +333,7 @@ export default function TransitionTable({
                   <th
                     className="border border-gray-300 px-4 py-2"
                     rowSpan={2}
-                  ></th>
+                  />
                   <th className="border border-gray-300 px-4 py-2" rowSpan={2}>
                     Node
                   </th>
@@ -362,6 +361,7 @@ export default function TransitionTable({
                       {key}
                       {idx >= (isNFA ? 3 : 2) && (
                         <button
+                          type="button"
                           className="absolute right-3 inset-y-0 font-bold text-2xl text-red-600 hover:text-red-800 transition"
                           onClick={() => deleteOutput(key)}
                           disabled={readOnly}
@@ -422,6 +422,7 @@ export default function TransitionTable({
                     <td className="border border-gray-300 text-center">
                       {tran.id !== 0 && (
                         <button
+                          type="button"
                           className="font-bold text-2xl text-red-600 hover:text-red-800 transition"
                           onClick={() => deleteTransition(tran.id)}
                           disabled={readOnly}
@@ -473,12 +474,14 @@ export default function TransitionTable({
             {!readOnly && (
               <>
                 <button
+                  type="button"
                   className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
                   onClick={addTransition}
                 >
                   Add Transition
                 </button>
                 <button
+                  type="button"
                   className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
                   onClick={addOutput}
                 >
@@ -500,6 +503,7 @@ export default function TransitionTable({
           {!readOnly && (
             <div>
               <button
+                type="button"
                 className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 disabled:bg-indigo-300 disabled:cursor-not-allowed"
                 onClick={applyTextEditor}
                 disabled={!textEditorApplicable}

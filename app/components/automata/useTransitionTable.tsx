@@ -1,5 +1,5 @@
 import { type Dispatch, type SetStateAction, useMemo, useState } from "react";
-import { type Transition } from "./types";
+import type { Transition } from "./types";
 
 interface TransitionTableReturn {
   transitions: Transition[];
@@ -14,7 +14,7 @@ interface TransitionTableReturn {
 }
 
 export default function useTransitionTable(
-  defaultIsNFA: boolean = false
+  defaultIsNFA = false
 ): TransitionTableReturn {
   const [isNFA, _setIsNFA] = useState<boolean>(defaultIsNFA);
   const [outputKeys, setOutputKeys] = useState<string[]>(["a", "b"]);

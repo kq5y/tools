@@ -1,7 +1,7 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
-import { FocusEvent, useMemo } from "react";
+import { type FocusEvent, useMemo } from "react";
 import {
-  Transition,
+  type Transition,
   TransitionTable,
   useTransitionTable,
 } from "~/components/automata";
@@ -25,50 +25,39 @@ export default function Typst() {
   } = useTransitionTable(false);
   const tableString = useMemo(() => {
     const values = transitions.map((tran) => {
-      let status = [];
+      const status = [];
       if (tran.initial) status.push("=q_0");
       if (tran.final) status.push("in F");
       const outputs2cell = (outputs: number[]) => {
         if (isNFA) {
           if ((outputs || []).length === 0) {
-            return `[$nothing$],`;
+            return "[$nothing$],";
           }
           return `[$\{${outputs.map((val) => nodesById[val].node).join(",")}\}$],`;
-        } else {
-          if ((outputs || []).length === 0) {
-            return `[],`;
-          }
-          return `[$${nodesById[outputs[0]].node}$],`;
         }
+        if ((outputs || []).length === 0) {
+          return "[],";
+        }
+        return `[$${nodesById[outputs[0]].node}$],`;
       };
-      return (
-        `    ${outputs2cell([tran.id])} [${status.length === 0 ? "" : `$${status.join(" ")}$`}], [${tran.id}], ` +
-        outputKeys
-          .map((key) => {
-            return outputs2cell(tran.outputs[key] || []);
-          })
-          .join(" ")
-      );
+      return `    ${outputs2cell([tran.id])} [${status.length === 0 ? "" : `$${status.join(" ")}$`}], [${tran.id}], ${outputKeys
+        .map((key) => {
+          return outputs2cell(tran.outputs[key] || []);
+        })
+        .join(" ")}`;
     });
-    return (
-      "#figure(\n" +
-      "  table(\n" +
-      `    columns: (${Array(outputKeys.length + 3)
-        .fill("auto")
-        .join(",")}),\n` +
-      `    table.header([], [], [alias], ${outputKeys.map((key) => `[${key}]`).join(", ")}),\n` +
-      values.join("\n") +
-      "\n" +
-      "  )\n" +
-      ")"
-    );
-  }, [transitions, outputKeys]);
+    return `#figure(\n  table(\n    columns: (${Array(outputKeys.length + 3)
+      .fill("auto")
+      .join(
+        ","
+      )}),\n    table.header([], [], [alias], ${outputKeys.map((key) => `[${key}]`).join(", ")}),\n${values.join("\n")}\n  )\n)`;
+  }, [transitions, outputKeys, isNFA, nodesById]);
   const automataString = useMemo(() => {
     const cycleTranIds = [] as number[];
     const tran2tran = (tran: Transition) => {
       const outputs = {} as { [key: number]: string[] };
       for (const key of outputKeys) {
-        for (const id of tran.outputs[key]) {
+        for (const id of tran.outputs[key] || []) {
           outputs[id] = outputs[id] || [];
           outputs[id].push(key);
         }
@@ -88,21 +77,7 @@ export default function Typst() {
       }
       return `      "${tran.id}": (${move.join(", ")}),`;
     };
-    return (
-      "#figure(\n" +
-      "  automaton(\n" +
-      "    (\n" +
-      transitions.map(tran2tran).join("\n") +
-      "\n" +
-      "    ),\n" +
-      "    style: (\n" +
-      "      transition: (curve: 0.1),\n" +
-      cycleTranIds.map((id) => `      "${id}-${id}": (curve: 0),`).join("\n") +
-      (cycleTranIds.length === 0 ? "" : "\n") +
-      "    ),\n" +
-      "  ),\n" +
-      ")"
-    );
+    return `#figure(\n  automaton(\n    (\n${transitions.map(tran2tran).join("\n")}\n    ),\n    style: (\n      transition: (curve: 0.1),\n${cycleTranIds.map((id) => `      "${id}-${id}": (curve: 0),`).join("\n")}${cycleTranIds.length === 0 ? "" : "\n"}    ),\n  ),\n)`;
   }, [transitions, outputKeys]);
   const onFocus = async (ev: FocusEvent<HTMLTextAreaElement>) => {
     ev.target.select();

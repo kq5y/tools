@@ -155,12 +155,14 @@ export default function Morse() {
           </div>
           <div className="flex flex-row gap-2 items-center">
             <button
+              type="button"
               className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
               onClick={() => handleLetterApply(true)}
             >
               Apply↑
             </button>
             <button
+              type="button"
               className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
               onClick={() => handleLetterApply(false)}
             >
