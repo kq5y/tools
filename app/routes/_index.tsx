@@ -12,6 +12,7 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   const rootmap = routes.reduce(
     (m, r) => {
+      if (r.hidden === true) return m;
       if (!m[r.cat]) m[r.cat] = [];
       m[r.cat].push(r);
       return m;

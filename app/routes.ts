@@ -2,6 +2,7 @@ interface ToolRoot {
   cat: string;
   title: string;
   desc: string;
+  hidden?: boolean;
 }
 
 const routes: ToolRoot[] = [
@@ -44,6 +45,12 @@ const routes: ToolRoot[] = [
     cat: "automata",
     title: "typst",
     desc: "Convert to automata notation on Typst",
+  },
+  {
+    cat: "automata",
+    title: "nfa2dfa",
+    desc: "Convert the NFA to the DFA",
+    hidden: true,
   },
 ];
 
