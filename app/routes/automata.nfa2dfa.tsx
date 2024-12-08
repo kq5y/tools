@@ -3,6 +3,7 @@ import type { MetaFunction } from "@remix-run/cloudflare";
 import mermaid from "mermaid";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { TransitionTable, useTransitionTable } from "~/components/automata";
+import ToTypstButton from "~/components/automata/ToTypstButton";
 import {
   getMermaidFromTransitions,
   nfa2dfa,
@@ -111,7 +112,12 @@ export default function NFA2DFA() {
           </div>
         </div>
       </div>
-      <TransitionTable hook={dfaHook} readOnly />
+      <TransitionTable hook={dfaHook} readOnly>
+        <ToTypstButton
+          isNFA={dfaHook.isNFA}
+          textEditorString={dfaHook.textEditorString}
+        />
+      </TransitionTable>
     </div>
   );
 }

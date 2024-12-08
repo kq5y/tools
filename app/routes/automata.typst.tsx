@@ -27,7 +27,7 @@ export default function Typst() {
   const automataHook = useTransitionTable(
     automataType === "nfa",
     undefined,
-    defaultTableString || ""
+    decodeURIComponent(defaultTableString || "")
   );
   const tableString = useMemo(() => {
     const values = automataHook.transitions.map((tran) => {

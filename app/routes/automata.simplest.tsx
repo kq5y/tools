@@ -3,6 +3,7 @@ import type { MetaFunction } from "@remix-run/cloudflare";
 import mermaid from "mermaid";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { TransitionTable, useTransitionTable } from "~/components/automata";
+import ToTypstButton from "~/components/automata/ToTypstButton";
 import {
   dfa2simplest,
   getMermaidFromTransitions,
@@ -121,7 +122,12 @@ export default function Simplest() {
           </span>
         ))}
       </div>
-      <TransitionTable hook={simplestHook} readOnly />
+      <TransitionTable hook={simplestHook} readOnly>
+        <ToTypstButton
+          isNFA={simplestHook.isNFA}
+          textEditorString={simplestHook.textEditorString}
+        />
+      </TransitionTable>
     </div>
   );
 }
