@@ -3,7 +3,8 @@ import type { Transition } from "./types";
 export const getMermaidFromTransitions = (
   trans: Transition[],
   outputKeys: string[],
-  useId = false
+  useId = false,
+  useKatex = true
 ) => {
   let res = "graph LR;\nstyle start fill:none, stroke:none;\nstart(( ));\n";
   let initialId = -1;
@@ -11,8 +12,13 @@ export const getMermaidFromTransitions = (
   for (const tran of trans) {
     if (tran.initial) initialId = tran.id;
     nodes[tran.node] = tran.id;
-    if (tran.final) res += `${tran.id}(((${useId ? tran.id : tran.node})));\n`;
-    else res += `${tran.id}((${useId ? tran.id : tran.node}));\n`;
+    res += tran.id.toString();
+    res += tran.final ? "(((" : "((";
+    res += useKatex ? '"$$' : '"';
+    res += useId ? tran.id : tran.node;
+    res += useKatex ? '$$"' : '"';
+    res += tran.final ? ")))" : "))";
+    res += ";\n";
   }
   res += `start --> ${initialId};\n`;
   for (const tran of trans) {
