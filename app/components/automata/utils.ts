@@ -34,7 +34,7 @@ export const dfa2simplest = (
   transitions: Transition[],
   outputKeys: string[],
   nodesById: { [key: number]: Transition }
-) => {
+): { simplestTransitions: Transition[]; groupStrings: string[] } => {
   const simplestTransitions: Transition[] = [];
   const groupStrings: string[] = [];
   let equivalentGroups: number[][] = [[], []];
@@ -116,7 +116,7 @@ export const nfa2dfa = (
   transitions: Transition[],
   outputKeys: string[],
   nodesById: { [key: number]: Transition }
-) => {
+): { dfaTransitions: Transition[]; outputKeys: string[] } => {
   let initialId = -1;
   const finalIds: number[] = [];
   const researchableKeys: { [key: number]: number[] } = {};
@@ -213,5 +213,8 @@ export const nfa2dfa = (
       ),
     };
   });
-  return { dfaTransitions };
+  return {
+    dfaTransitions,
+    outputKeys: outputKeys.filter((key) => key !== "ε"),
+  };
 };

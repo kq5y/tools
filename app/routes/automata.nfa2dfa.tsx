@@ -2,11 +2,7 @@ import elkLayouts from "@mermaid-js/layout-elk";
 import type { MetaFunction } from "@remix-run/cloudflare";
 import mermaid from "mermaid";
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import {
-  type Transition,
-  TransitionTable,
-  useTransitionTable,
-} from "~/components/automata";
+import { TransitionTable, useTransitionTable } from "~/components/automata";
 import {
   getMermaidFromTransitions,
   nfa2dfa,
@@ -18,14 +14,8 @@ export const meta: MetaFunction = () => {
 };
 
 export default function NFA2DFA() {
-  const {
-    transitions,
-    setTransitions,
-    outputKeys,
-    setOutputKeys,
-    isNFA,
-    nodesById,
-  } = useTransitionTable(true);
+  const nfaHook = useTransitionTable(true);
+  const dfaHook = useTransitionTable(false);
   const previewNFARef = useRef<HTMLPreElement>(null);
   const previewDFARef = useRef<HTMLPreElement>(null);
   const dfaConvertable = useMemo(() => {
@@ -34,7 +24,7 @@ export default function NFA2DFA() {
     const targetNodeIds = new Set<number>();
     let initialCount = 0;
     let finalCount = 0;
-    for (const tran of transitions) {
+    for (const tran of nfaHook.transitions) {
       if (tran.node === "") return false;
       if (nodes.has(tran.node)) return false;
       if (nodeIds.has(tran.id)) return false;
@@ -42,7 +32,7 @@ export default function NFA2DFA() {
       if (tran.final) finalCount++;
       nodes.add(tran.node);
       nodeIds.add(tran.id);
-      for (const key of outputKeys) {
+      for (const key of nfaHook.outputKeys) {
         for (const nid of tran.outputs[key] || []) {
           targetNodeIds.add(nid);
         }
@@ -52,14 +42,20 @@ export default function NFA2DFA() {
     if (finalCount <= 0) return false;
     if (targetNodeIds.difference(nodeIds).size > 0) return false;
     return true;
-  }, [transitions, outputKeys]);
+  }, [nfaHook.transitions, nfaHook.outputKeys]);
   const getPreviewNFAMermaid = useCallback(() => {
-    return getMermaidFromTransitions(transitions, outputKeys);
-  }, [transitions, outputKeys]);
+    return getMermaidFromTransitions(nfaHook.transitions, nfaHook.outputKeys);
+  }, [nfaHook.transitions, nfaHook.outputKeys]);
   const getPreviewDFAMermaid = useCallback(() => {
-    const { dfaTransitions } = nfa2dfa(transitions, outputKeys, nodesById);
+    const { dfaTransitions, outputKeys } = nfa2dfa(
+      nfaHook.transitions,
+      nfaHook.outputKeys,
+      nfaHook.nodesById
+    );
+    dfaHook.setOutputKeys(outputKeys);
+    dfaHook.setTransitions(dfaTransitions);
     return getMermaidFromTransitions(dfaTransitions, outputKeys, true);
-  }, [transitions, outputKeys, nodesById]);
+  }, [nfaHook.transitions, nfaHook.outputKeys, nfaHook.nodesById]);
   const convertDFA = async () => {
     if (previewNFARef.current && previewDFARef.current) {
       const previewNFA = getPreviewNFAMermaid();
@@ -87,14 +83,7 @@ export default function NFA2DFA() {
   return (
     <div>
       <h1 className="text-2xl font-bold">NFA to DFA</h1>
-      <TransitionTable
-        transitions={transitions}
-        setTransitions={setTransitions}
-        outputKeys={outputKeys}
-        setOutputKeys={setOutputKeys}
-        nodesById={nodesById}
-        isNFA={isNFA}
-      >
+      <TransitionTable hook={nfaHook}>
         <button
           type="button"
           className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 disabled:bg-indigo-300 disabled:cursor-not-allowed"
@@ -122,6 +111,7 @@ export default function NFA2DFA() {
           </div>
         </div>
       </div>
+      <TransitionTable hook={dfaHook} readOnly />
     </div>
   );
 }

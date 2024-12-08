@@ -19,21 +19,15 @@ export default function Simplest() {
   const [equivalentGroupConverts, setEquivalentGroupConverts] = useState<
     string[]
   >([]);
-  const {
-    transitions,
-    setTransitions,
-    outputKeys,
-    setOutputKeys,
-    nodesById,
-    isNFA,
-  } = useTransitionTable(false);
+  const dfaHook = useTransitionTable(false);
+  const simplestHook = useTransitionTable(false);
   const simplestGeneratable = useMemo(() => {
     const nodes = new Set<string>();
     const nodeIds = new Set<number>();
     const targetNodeIds = new Set<number>();
     let initialCount = 0;
     let finalCount = 0;
-    for (const tran of transitions) {
+    for (const tran of dfaHook.transitions) {
       if (tran.node === "") return false;
       if (nodes.has(tran.node)) return false;
       if (nodeIds.has(tran.id)) return false;
@@ -41,7 +35,7 @@ export default function Simplest() {
       if (tran.final) finalCount++;
       nodes.add(tran.node);
       nodeIds.add(tran.id);
-      for (const key of outputKeys) {
+      for (const key of dfaHook.outputKeys) {
         if ((tran.outputs[key] || []).length !== 1) return false;
         targetNodeIds.add(tran.outputs[key][0]);
       }
@@ -50,19 +44,21 @@ export default function Simplest() {
     if (finalCount <= 0) return false;
     if (targetNodeIds.difference(nodeIds).size > 0) return false;
     return true;
-  }, [transitions, outputKeys]);
+  }, [dfaHook.transitions, dfaHook.outputKeys]);
   const getPreviewAutomataMermaid = useCallback(() => {
-    return getMermaidFromTransitions(transitions, outputKeys);
-  }, [transitions, outputKeys]);
+    return getMermaidFromTransitions(dfaHook.transitions, dfaHook.outputKeys);
+  }, [dfaHook.transitions, dfaHook.outputKeys]);
   const getPreviewSimplestAutomataMermaid = useCallback(() => {
     const { simplestTransitions, groupStrings } = dfa2simplest(
-      transitions,
-      outputKeys,
-      nodesById
+      dfaHook.transitions,
+      dfaHook.outputKeys,
+      dfaHook.nodesById
     );
     setEquivalentGroupConverts(groupStrings);
-    return getMermaidFromTransitions(simplestTransitions, outputKeys);
-  }, [transitions, outputKeys, nodesById]);
+    simplestHook.setOutputKeys(dfaHook.outputKeys);
+    simplestHook.setTransitions(simplestTransitions);
+    return getMermaidFromTransitions(simplestTransitions, dfaHook.outputKeys);
+  }, [dfaHook.transitions, dfaHook.outputKeys, dfaHook.nodesById]);
   const generateSimplest = async () => {
     if (previewAutomataRef.current && previewSimplestAutomataRef.current) {
       const preview = getPreviewAutomataMermaid();
@@ -90,14 +86,7 @@ export default function Simplest() {
   return (
     <div>
       <h1 className="text-2xl font-bold">Simplest DFA</h1>
-      <TransitionTable
-        transitions={transitions}
-        setTransitions={setTransitions}
-        outputKeys={outputKeys}
-        setOutputKeys={setOutputKeys}
-        nodesById={nodesById}
-        isNFA={isNFA}
-      >
+      <TransitionTable hook={dfaHook}>
         <button
           type="button"
           className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 disabled:bg-indigo-300 disabled:cursor-not-allowed"
@@ -132,6 +121,7 @@ export default function Simplest() {
           </span>
         ))}
       </div>
+      <TransitionTable hook={simplestHook} readOnly />
     </div>
   );
 }

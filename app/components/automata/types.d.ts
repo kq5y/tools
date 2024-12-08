@@ -14,4 +14,20 @@ export interface FocusConfig {
   left: number;
 }
 
+export interface TransitionTableHookReturn {
+  transitions: Transition[];
+  setTransitions: Dispatch<SetStateAction<Transition[]>>;
+  nodesById: {
+    [key: number]: Transition;
+  };
+  outputKeys: string[];
+  setOutputKeys: (vals: string[]) => void;
+  isNFA: boolean;
+  setIsNFA: (val: boolean) => void;
+  editorMode: EditorModeType;
+  setEditorMode: (val: EditorModeType) => void;
+  textEditorString: string;
+  setTextEditorString: (val: string) => void;
+}
+
 export type EditorModeType = "table" | "text";

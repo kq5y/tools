@@ -1,4 +1,5 @@
-import type { MetaFunction } from "@remix-run/cloudflare";
+import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
+import { useLoaderData } from "@remix-run/react";
 import { type FocusEvent, useMemo } from "react";
 import {
   type Transition,
@@ -11,50 +12,64 @@ export const meta: MetaFunction = () => {
   return getMeta("automata", "typst");
 };
 
+export const loader: LoaderFunction = ({ request }) => {
+  const url = new URL(request.url);
+  const type_ = url.searchParams.get("type");
+  const query = url.searchParams.get("q");
+  return Response.json({ type_, query });
+};
+
 export default function Typst() {
-  const {
-    transitions,
-    outputKeys,
-    nodesById,
-    setTransitions,
-    setOutputKeys,
-    isNFA,
-    setIsNFA,
-  } = useTransitionTable(false);
+  const { type_: automataType, query: defaultTableString } = useLoaderData<{
+    type_: string | null;
+    query: string | null;
+  }>();
+  const automataHook = useTransitionTable(
+    automataType === "nfa",
+    undefined,
+    defaultTableString || ""
+  );
   const tableString = useMemo(() => {
-    const values = transitions.map((tran) => {
+    const values = automataHook.transitions.map((tran) => {
       const status = [];
       if (tran.initial) status.push("=q_0");
       if (tran.final) status.push("in F");
       const outputs2cell = (outputs: number[]) => {
-        if (isNFA) {
+        if (automataHook.isNFA) {
           if ((outputs || []).length === 0) {
             return "[$nothing$],";
           }
-          return `[$\{${outputs.map((val) => nodesById[val].node).join(",")}\}$],`;
+          return `[$\{${outputs.map((val) => automataHook.nodesById[val].node).join(",")}\}$],`;
         }
         if ((outputs || []).length === 0) {
           return "[],";
         }
-        return `[$${nodesById[outputs[0]].node}$],`;
+        return `[$${automataHook.nodesById[outputs[0]].node}$],`;
       };
-      return `    ${outputs2cell([tran.id])} [${status.length === 0 ? "" : `$${status.join(" ")}$`}], [${tran.id}], ${outputKeys
+      return `    ${outputs2cell([tran.id])} [${status.length === 0 ? "" : `$${status.join(" ")}$`}], [${tran.id}], ${automataHook.outputKeys
         .map((key) => {
           return outputs2cell(tran.outputs[key] || []);
         })
         .join(" ")}`;
     });
-    return `#figure(\n  table(\n    columns: (${Array(outputKeys.length + 3)
+    return `#figure(\n  table(\n    columns: (${Array(
+      automataHook.outputKeys.length + 3
+    )
       .fill("auto")
       .join(
         ","
-      )}),\n    table.header([], [], [alias], ${outputKeys.map((key) => `[${key}]`).join(", ")}),\n${values.join("\n")}\n  )\n)`;
-  }, [transitions, outputKeys, isNFA, nodesById]);
+      )}),\n    table.header([], [], [alias], ${automataHook.outputKeys.map((key) => `[${key}]`).join(", ")}),\n${values.join("\n")}\n  )\n)`;
+  }, [
+    automataHook.transitions,
+    automataHook.outputKeys,
+    automataHook.isNFA,
+    automataHook.nodesById,
+  ]);
   const automataString = useMemo(() => {
     const cycleTranIds = [] as number[];
     const tran2tran = (tran: Transition) => {
       const outputs = {} as { [key: number]: string[] };
-      for (const key of outputKeys) {
+      for (const key of automataHook.outputKeys) {
         for (const id of tran.outputs[key] || []) {
           outputs[id] = outputs[id] || [];
           outputs[id].push(key);
@@ -75,8 +90,8 @@ export default function Typst() {
       }
       return `      "${tran.id}": (${move.join(", ")}),`;
     };
-    return `#figure(\n  automaton(\n    (\n${transitions.map(tran2tran).join("\n")}\n    ),\n    style: (\n      transition: (curve: 0.1),\n${cycleTranIds.map((id) => `      "${id}-${id}": (curve: 0),`).join("\n")}${cycleTranIds.length === 0 ? "" : "\n"}    ),\n  ),\n)`;
-  }, [transitions, outputKeys]);
+    return `#figure(\n  automaton(\n    (\n${automataHook.transitions.map(tran2tran).join("\n")}\n    ),\n    style: (\n      transition: (curve: 0.1),\n${cycleTranIds.map((id) => `      "${id}-${id}": (curve: 0),`).join("\n")}${cycleTranIds.length === 0 ? "" : "\n"}    ),\n  ),\n)`;
+  }, [automataHook.transitions, automataHook.outputKeys]);
   const onFocus = async (ev: FocusEvent<HTMLTextAreaElement>) => {
     ev.target.select();
     await navigator.clipboard.writeText(ev.target.value);
@@ -88,8 +103,8 @@ export default function Typst() {
         <div className="flex items-center me-4">
           <input
             id="selectNFACheckbox"
-            checked={isNFA}
-            onChange={(ev) => setIsNFA(ev.target.checked)}
+            checked={automataHook.isNFA}
+            onChange={(ev) => automataHook.setIsNFA(ev.target.checked)}
             type="radio"
             className="appearance-none h-4 w-4 border-4 border-gray-300 rounded-full checked:border-indigo-600 checked:bg-white"
           />
@@ -103,8 +118,8 @@ export default function Typst() {
         <div className="flex items-center me-4">
           <input
             id="selectDFACheckbox"
-            checked={!isNFA}
-            onChange={(ev) => setIsNFA(!ev.target.checked)}
+            checked={!automataHook.isNFA}
+            onChange={(ev) => automataHook.setIsNFA(!ev.target.checked)}
             type="radio"
             className="appearance-none h-4 w-4 border-4 border-gray-300 rounded-full checked:border-indigo-600 checked:bg-white"
           />
@@ -116,14 +131,7 @@ export default function Typst() {
           </label>
         </div>
       </div>
-      <TransitionTable
-        transitions={transitions}
-        outputKeys={outputKeys}
-        nodesById={nodesById}
-        setOutputKeys={setOutputKeys}
-        setTransitions={setTransitions}
-        isNFA={isNFA}
-      />
+      <TransitionTable hook={automataHook} />
       <div className="flex flex-col gap-2">
         <div className="flex flex-col ">
           <span>Transition Table</span>

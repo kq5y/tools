@@ -8,31 +8,35 @@ import {
   useRef,
   useState,
 } from "react";
-import type { EditorModeType, FocusConfig, Transition } from "./types";
+import type {
+  EditorModeType,
+  FocusConfig,
+  Transition,
+  TransitionTableHookReturn,
+} from "./types";
 
 interface Props {
-  transitions: Transition[];
-  setTransitions: Dispatch<Transition[]>;
-  nodesById: { [key: number]: Transition };
-  outputKeys: string[];
-  setOutputKeys: Dispatch<string[]>;
-  isNFA: boolean;
+  hook: TransitionTableHookReturn;
   readOnly?: boolean;
   children?: ReactNode;
 }
 
 export default function TransitionTable({
-  transitions,
-  setTransitions,
-  nodesById,
-  outputKeys,
-  setOutputKeys,
-  isNFA,
+  hook: {
+    transitions,
+    setTransitions,
+    nodesById,
+    outputKeys,
+    setOutputKeys,
+    isNFA,
+    editorMode,
+    setEditorMode,
+    textEditorString,
+    setTextEditorString,
+  },
   readOnly = false,
   children = undefined,
 }: Props) {
-  const [editorMode, setEditorMode] = useState<EditorModeType>("table");
-  const [textEditorString, setTextEditorString] = useState("");
   const focusAreaRef = useRef<HTMLDivElement | null>(null);
   const [focusConfig, setFocusConfig] = useState<FocusConfig>({
     open: false,
@@ -210,14 +214,23 @@ export default function TransitionTable({
       .split("|")
       .map((col) => col.trim())
       .filter((col) => col);
-    if (headerColumns.length !== 4 + outputKeys.length) return false;
+    if (headerColumns.length < 6 + (isNFA ? 1 : 0)) return false;
+    const outputKeyLength = headerColumns.length - 4;
+    if (
+      isNFA &&
+      rows[0]
+        .split("|")
+        .map((col) => col.trim())
+        .slice(1, -1)[4] !== "ε"
+    )
+      return false;
     const ids = new Set<number>();
     for (let i = 2; i < rows.length; i++) {
       const columns = rows[i]
         .split("|")
         .map((col) => col.trim())
         .slice(1, -1);
-      if (columns.length !== 4 + outputKeys.length) return false;
+      if (columns.length !== 4 + outputKeyLength) return false;
       if (Number.isNaN(Number(columns[0]))) return false;
       if (
         ![columns[2], columns[3]].every(
@@ -238,10 +251,15 @@ export default function TransitionTable({
       ids.add(Number(columns[0]));
     }
     return true;
-  }, [textEditorString, outputKeys]);
+  }, [textEditorString, isNFA]);
   const applyTextEditor = useCallback(() => {
-    const newTransitions: Transition[] = [];
     const rows = textEditorString.trim().split("\n");
+    const newTransitions: Transition[] = [];
+    const newOutputKeys = rows[0]
+      .split("|")
+      .map((col) => col.trim())
+      .slice(1, -1)
+      .slice(4);
     for (let i = 2; i < rows.length; i++) {
       const columns = rows[i]
         .split("|")
@@ -252,7 +270,7 @@ export default function TransitionTable({
         node: columns[1],
         initial: columns[2].toLowerCase() === "true",
         final: columns[3].toLowerCase() === "true",
-        outputs: outputKeys.reduce(
+        outputs: newOutputKeys.reduce(
           (acc, key, idx) => {
             acc[key] = columns[4 + idx]
               .split(",")
@@ -266,19 +284,26 @@ export default function TransitionTable({
       });
     }
     setTransitions(newTransitions);
+    setOutputKeys(newOutputKeys);
     setEditorMode("table");
-  }, [textEditorString, outputKeys, setTransitions]);
-  const getNodes = (outputs: number[]) => {
-    return outputs.map((val) => nodesById[val].node);
-  };
-  const handleClickFocusOutside = (ev: MouseEvent) => {
-    if (
-      focusAreaRef.current &&
-      !focusAreaRef.current.contains(ev.target as HTMLElement)
-    ) {
-      onOutputFocusChange(false);
-    }
-  };
+  }, [textEditorString]);
+  const getNodes = useCallback(
+    (outputs: number[]) => {
+      return outputs.map((val) => nodesById[val].node);
+    },
+    [nodesById]
+  );
+  const handleClickFocusOutside = useCallback(
+    (ev: MouseEvent) => {
+      if (
+        focusAreaRef.current &&
+        !focusAreaRef.current.contains(ev.target as HTMLElement)
+      ) {
+        onOutputFocusChange(false);
+      }
+    },
+    [focusAreaRef]
+  );
   useEffect(() => {
     if (focusConfig.open) {
       document.addEventListener("mousedown", handleClickFocusOutside);
@@ -289,6 +314,11 @@ export default function TransitionTable({
       document.removeEventListener("mousedown", handleClickFocusOutside);
     };
   }, [focusConfig]);
+  useEffect(() => {
+    if (textEditorString !== "" && textEditorApplicable) {
+      applyTextEditor();
+    }
+  }, []);
   return (
     <div>
       <div className="mb-2 border-b border-gray-200">

@@ -50,7 +50,6 @@ const routes: ToolRoot[] = [
     cat: "automata",
     title: "nfa2dfa",
     desc: "Convert the NFA to the DFA",
-    hidden: true,
   },
 ];
 
