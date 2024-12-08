@@ -293,17 +293,14 @@ export default function TransitionTable({
     },
     [nodesById]
   );
-  const handleClickFocusOutside = useCallback(
-    (ev: MouseEvent) => {
-      if (
-        focusAreaRef.current &&
-        !focusAreaRef.current.contains(ev.target as HTMLElement)
-      ) {
-        onOutputFocusChange(false);
-      }
-    },
-    [focusAreaRef]
-  );
+  const handleClickFocusOutside = (ev: MouseEvent) => {
+    if (
+      focusAreaRef.current &&
+      !focusAreaRef.current.contains(ev.target as HTMLElement)
+    ) {
+      onOutputFocusChange(false);
+    }
+  };
   useEffect(() => {
     if (focusConfig.open) {
       document.addEventListener("mousedown", handleClickFocusOutside);
