@@ -6,12 +6,12 @@ interface Props {
 }
 
 export default function ToTypstButton({ isNFA, textEditorString }: Props) {
-  const onClick = useCallback(() => {
+  const onClick = () => {
     const url = new URL("/automata/typst", window.location.href);
     url.searchParams.set("type", isNFA ? "nfa" : "dfa");
     url.searchParams.set("q", encodeURIComponent(textEditorString));
     window.open(url.href, "_blank");
-  }, [isNFA, textEditorString]);
+  };
   return (
     <button
       type="button"

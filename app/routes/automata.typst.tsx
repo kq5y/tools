@@ -66,6 +66,12 @@ export default function Typst() {
     automataHook.nodesById,
   ]);
   const automataString = useMemo(() => {
+    let initialId = -1;
+    const finalIds: number[] = [];
+    for (const tran of automataHook.transitions) {
+      if (tran.initial) initialId = tran.id;
+      if (tran.final) finalIds.push(tran.id);
+    }
     const cycleTranIds = [] as number[];
     const tran2tran = (tran: Transition) => {
       const outputs = {} as { [key: number]: string[] };
@@ -90,7 +96,7 @@ export default function Typst() {
       }
       return `      "${tran.id}": (${move.join(", ")}),`;
     };
-    return `#figure(\n  automaton(\n    (\n${automataHook.transitions.map(tran2tran).join("\n")}\n    ),\n    style: (\n      transition: (curve: 0.1),\n${cycleTranIds.map((id) => `      "${id}-${id}": (curve: 0),`).join("\n")}${cycleTranIds.length === 0 ? "" : "\n"}    ),\n  ),\n)`;
+    return `#figure(\n  automaton(\n    (\n${automataHook.transitions.map(tran2tran).join("\n")}\n    ),\n    style: (\n      transition: (curve: 0.1),\n${cycleTranIds.map((id) => `      "${id}-${id}": (curve: 0),`).join("\n")}${cycleTranIds.length === 0 ? "" : "\n"}    ),\n    initial: "${initialId}",\n    final: (${finalIds.map((id) => `"${id}"`).join(", ")}),\n  ),\n)`;
   }, [automataHook.transitions, automataHook.outputKeys]);
   const onFocus = async (ev: FocusEvent<HTMLTextAreaElement>) => {
     ev.target.select();
