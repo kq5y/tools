@@ -250,6 +250,21 @@ export default function TransitionTable({
       if (ids.has(Number(columns[0]))) return false;
       ids.add(Number(columns[0]));
     }
+    for (let i = 2; i < rows.length; i++) {
+      const columns = rows[i]
+        .split("|")
+        .map((col) => col.trim())
+        .slice(1, -1);
+      for (let j = 4; j < columns.length; j++) {
+        if (
+          columns[j]
+            .split(",")
+            .filter((col) => col)
+            .some((val) => !ids.has(Number(val)))
+        )
+          return false;
+      }
+    }
     return true;
   }, [textEditorString, isNFA]);
   const applyTextEditor = useCallback(() => {
