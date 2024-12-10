@@ -1,5 +1,3 @@
-import { useCallback } from "react";
-
 interface Props {
   isNFA: boolean;
   textEditorString: string;

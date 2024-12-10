@@ -1,6 +1,4 @@
-import { useMemo, useState } from "react";
-import { useCallback } from "react";
-import { useEffect } from "react";
+import { useCallback, useMemo, useState } from "react";
 import type {
   EditorModeType,
   Transition,

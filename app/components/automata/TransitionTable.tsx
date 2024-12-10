@@ -1,6 +1,5 @@
 import {
   type ChangeEvent,
-  type Dispatch,
   type ReactNode,
   useCallback,
   useEffect,
@@ -9,7 +8,6 @@ import {
   useState,
 } from "react";
 import type {
-  EditorModeType,
   FocusConfig,
   Transition,
   TransitionTableHookReturn,
