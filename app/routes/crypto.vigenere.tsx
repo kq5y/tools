@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { useMemo, useState } from "react";
-import { getMeta } from "~/routes";
+import { getMeta, getTitle } from "~/routes";
 
 export const meta: MetaFunction = () => {
   return getMeta("crypto", "vigenere");
@@ -60,7 +60,7 @@ export default function Vigenere() {
   }, [targetText, usingKey]);
   return (
     <div>
-      <h1 className="text-2xl font-bold">Vigenere Cipher</h1>
+      <h1 className="text-2xl font-bold">{getTitle("crypto", "vigenere")}</h1>
       <div className="p-2">
         <div className="mb-2">
           <textarea

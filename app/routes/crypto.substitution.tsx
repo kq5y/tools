@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { useMemo, useState } from "react";
-import { getMeta } from "~/routes";
+import { getMeta, getTitle } from "~/routes";
 
 export const meta: MetaFunction = () => {
   return getMeta("crypto", "substitution");
@@ -52,7 +52,9 @@ export default function Substitution() {
   }, [encrypted]);
   return (
     <div>
-      <h1 className="text-2xl font-bold">Substitution Support</h1>
+      <h1 className="text-2xl font-bold">
+        {getTitle("crypto", "substitution")}
+      </h1>
       <div className="p-2">
         <div className="mb-2">
           <textarea

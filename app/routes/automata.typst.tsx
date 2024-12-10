@@ -6,7 +6,7 @@ import {
   TransitionTable,
   useTransitionTable,
 } from "~/components/automata";
-import { getMeta } from "~/routes";
+import { getMeta, getTitle } from "~/routes";
 
 export const meta: MetaFunction = () => {
   return getMeta("automata", "typst");
@@ -104,7 +104,7 @@ export default function Typst() {
   };
   return (
     <div>
-      <h1 className="text-2xl font-bold">Typst Automata</h1>
+      <h1 className="text-2xl font-bold">{getTitle("automata", "typst")}</h1>
       <div className="flex">
         <div className="flex items-center me-4">
           <input

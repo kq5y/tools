@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { useEffect, useMemo, useState } from "react";
-import { getMeta } from "~/routes";
+import { getMeta, getTitle } from "~/routes";
 
 export const meta: MetaFunction = () => {
   return getMeta("school", "dakoku");
@@ -106,7 +106,7 @@ export default function Dakoku() {
   };
   return (
     <div>
-      <h1 className="text-2xl font-bold">Dakoku</h1>
+      <h1 className="text-2xl font-bold">{getTitle("school", "dakoku")}</h1>
       <div className="p-2">
         <div className="mb-2 overflow-x-auto">
           <table className="min-w-full text-sm bg-white rounded-lg shadow-md border-separate border-spacing-0 table-fixed">

@@ -1,5 +1,6 @@
 interface ToolRoot {
   cat: string;
+  slug: string;
   title: string;
   desc: string;
   hidden?: boolean;
@@ -8,61 +9,78 @@ interface ToolRoot {
 const routes: ToolRoot[] = [
   {
     cat: "crypto",
-    title: "caesar",
+    slug: "caesar",
+    title: "Caesar Cipher",
     desc: "Caesar Cipher Encryption and Decryption",
   },
   {
     cat: "crypto",
-    title: "vigenere",
+    slug: "vigenere",
+    title: "Vigenere Cipher",
     desc: "Vigenere Cipher Encryption and Decryption",
   },
   {
     cat: "crypto",
-    title: "rail-fence",
+    slug: "rail-fence",
+    title: "Rail-Fence Cipher",
     desc: "Rail-Fence Cipher Encryption and Decryption",
   },
   {
     cat: "crypto",
-    title: "substitution",
+    slug: "substitution",
+    title: "Substitution Support",
     desc: "Helping to decipher substitutions",
   },
   {
     cat: "crypto",
-    title: "morse",
+    slug: "morse",
+    title: "Morse Code",
     desc: "Morse Code Encryption and Decryption",
   },
   {
     cat: "school",
-    title: "dakoku",
+    slug: "dakoku",
+    title: "Dakoku",
     desc: "Lecture attendance management",
   },
   {
     cat: "automata",
-    title: "simplest",
+    slug: "simplest",
+    title: "Simplest DFA",
     desc: "Convert the DFA to the simplest DFA",
   },
   {
     cat: "automata",
-    title: "typst",
-    desc: "Convert to automata notation on Typst",
+    slug: "nfa2dfa",
+    title: "NFA to DFA",
+    desc: "Convert the NFA to the DFA",
   },
   {
     cat: "automata",
-    title: "nfa2dfa",
-    desc: "Convert the NFA to the DFA",
+    slug: "typst",
+    title: "Typst Automata",
+    desc: "Convert to automata notation on Typst",
   },
 ];
 
-function getMeta(cat: string, title: string) {
+function getMeta(cat: string, slug: string) {
+  const route = routes.filter(
+    (route) => route.cat === cat && route.slug === slug
+  )[0];
   return [
-    { title: `/${cat}/${title}` },
+    { title: `${route.title} | /${cat}/${slug}` },
     {
       name: "description",
-      content: routes.filter(
-        (route) => route.cat === cat && route.title === title
-      )[0].desc,
+      content: route.desc,
     },
   ];
 }
 
-export { routes, getMeta, type ToolRoot };
+function getTitle(cat: string, slug: string) {
+  const route = routes.filter(
+    (route) => route.cat === cat && route.slug === slug
+  )[0];
+  return route.title;
+}
+
+export { routes, getMeta, getTitle, type ToolRoot };

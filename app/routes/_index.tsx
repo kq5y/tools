@@ -27,12 +27,15 @@ export default function Index() {
           <div className="text-xl font-semibold text-indigo-950">/{cat}</div>
           <div className="flex flex-col">
             {rootmap[cat].map((r) => (
-              <div key={r.title} className="flex gap-x-1 px-4 items-baseline">
+              <div
+                key={`/${cat}/${r.slug}`}
+                className="flex gap-x-1 px-4 items-baseline"
+              >
                 <Link
-                  to={`/${cat}/${r.title}`}
+                  to={`/${cat}/${r.slug}`}
                   className="text-lg font-bold text-indigo-950 whitespace-nowrap"
                 >
-                  /{r.title}
+                  /{r.slug}
                 </Link>
                 <span className="text-gray-500 text-sm">:</span>
                 <span className="text-gray-600 text-sm">{r.desc}</span>

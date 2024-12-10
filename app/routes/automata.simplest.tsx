@@ -8,7 +8,7 @@ import {
   dfa2simplest,
   getMermaidFromTransitions,
 } from "~/components/automata/utils";
-import { getMeta } from "~/routes";
+import { getMeta, getTitle } from "~/routes";
 
 export const meta: MetaFunction = () => {
   return getMeta("automata", "simplest");
@@ -86,7 +86,7 @@ export default function Simplest() {
   }, []);
   return (
     <div>
-      <h1 className="text-2xl font-bold">Simplest DFA</h1>
+      <h1 className="text-2xl font-bold">{getTitle("automata", "simplest")}</h1>
       <TransitionTable hook={dfaHook}>
         <button
           type="button"

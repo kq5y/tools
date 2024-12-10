@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { useState } from "react";
-import { getMeta } from "~/routes";
+import { getMeta, getTitle } from "~/routes";
 
 export const meta: MetaFunction = () => {
   return getMeta("crypto", "morse");
@@ -103,7 +103,7 @@ export default function Morse() {
   };
   return (
     <div>
-      <h1 className="text-2xl font-bold">Morse Code</h1>
+      <h1 className="text-2xl font-bold">{getTitle("crypto", "morse")}</h1>
       <div className="p-2">
         <div className="mb-2">
           <textarea

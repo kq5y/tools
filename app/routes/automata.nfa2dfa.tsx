@@ -8,7 +8,7 @@ import {
   getMermaidFromTransitions,
   nfa2dfa,
 } from "~/components/automata/utils";
-import { getMeta } from "~/routes";
+import { getMeta, getTitle } from "~/routes";
 
 export const meta: MetaFunction = () => {
   return getMeta("automata", "nfa2dfa");
@@ -83,7 +83,7 @@ export default function NFA2DFA() {
   }, []);
   return (
     <div>
-      <h1 className="text-2xl font-bold">NFA to DFA</h1>
+      <h1 className="text-2xl font-bold">{getTitle("automata", "nfa2dfa")}</h1>
       <TransitionTable hook={nfaHook}>
         <button
           type="button"
