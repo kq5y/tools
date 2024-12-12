@@ -118,7 +118,8 @@ export default function Simplest() {
       <div className="flex flex-col">
         {equivalentGroupConverts.map((conv, idx) => (
           <span key={idx.toString()}>
-            P{idx} = {conv}
+            P_{idx} &= {conv.replaceAll("[", "{").replaceAll("]", "}")}{" "}
+            {idx !== equivalentGroupConverts.length - 1 ? " \\" : ""}
           </span>
         ))}
       </div>
