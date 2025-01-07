@@ -61,6 +61,12 @@ const routes: ToolRoot[] = [
     title: "Typst Automata",
     desc: "Convert to automata notation on Typst",
   },
+  {
+    cat: "math",
+    slug: "number",
+    title: "Base Conversion",
+    desc: "Convert number base",
+  },
 ];
 
 function getMeta(cat: string, slug: string) {
