@@ -4,7 +4,7 @@ import mermaid from "mermaid";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { Button } from "~/components/Button";
 import { TransitionTable, useTransitionTable } from "~/components/automata";
-import ToTypstButton from "~/components/automata/ToTypstButton";
+import ForwardButton from "~/components/automata/ForwardButton";
 import {
   getMermaidFromTransitions,
   nfa2dfa,
@@ -109,7 +109,12 @@ export default function NFA2DFA() {
         </div>
       </div>
       <TransitionTable hook={dfaHook} readOnly>
-        <ToTypstButton
+        <ForwardButton
+          type="simplest"
+          textEditorString={dfaHook.textEditorString}
+        />
+        <ForwardButton
+          type="typst"
           isNFA={dfaHook.isNFA}
           textEditorString={dfaHook.textEditorString}
         />

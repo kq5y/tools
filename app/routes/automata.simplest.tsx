@@ -1,10 +1,11 @@
 import elkLayouts from "@mermaid-js/layout-elk";
-import type { MetaFunction } from "@remix-run/cloudflare";
+import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
+import { useLoaderData } from "@remix-run/react";
 import mermaid from "mermaid";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "~/components/Button";
 import { TransitionTable, useTransitionTable } from "~/components/automata";
-import ToTypstButton from "~/components/automata/ToTypstButton";
+import ForwardButton from "~/components/automata/ForwardButton";
 import {
   dfa2simplest,
   getMermaidFromTransitions,
@@ -15,13 +16,26 @@ export const meta: MetaFunction = () => {
   return getMeta("automata", "simplest");
 };
 
+export const loader: LoaderFunction = ({ request }) => {
+  const url = new URL(request.url);
+  const query = url.searchParams.get("q");
+  return Response.json({ query });
+};
+
 export default function Simplest() {
+  const { query: defaultTableString } = useLoaderData<{
+    query: string | null;
+  }>();
   const previewAutomataRef = useRef<HTMLPreElement>(null);
   const previewSimplestAutomataRef = useRef<HTMLPreElement>(null);
   const [equivalentGroupConverts, setEquivalentGroupConverts] = useState<
     string[]
   >([]);
-  const dfaHook = useTransitionTable(false);
+  const dfaHook = useTransitionTable(
+    false,
+    undefined,
+    decodeURIComponent(defaultTableString || "")
+  );
   const simplestHook = useTransitionTable(false);
   const simplestGeneratable = useMemo(() => {
     const nodes = new Set<string>();
@@ -120,7 +134,8 @@ export default function Simplest() {
         ))}
       </div>
       <TransitionTable hook={simplestHook} readOnly>
-        <ToTypstButton
+        <ForwardButton
+          type="typst"
           isNFA={simplestHook.isNFA}
           textEditorString={simplestHook.textEditorString}
         />
