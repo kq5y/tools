@@ -20,7 +20,8 @@
     "rules": {
       "recommended": true,
       "correctness": {
-        "useExhaustiveDependencies": "info"
+        "useExhaustiveDependencies": "off",
+        "noUnusedImports": "warn"
       }
     },
     "include": ["app"],

@@ -2,6 +2,7 @@ import elkLayouts from "@mermaid-js/layout-elk";
 import type { MetaFunction } from "@remix-run/cloudflare";
 import mermaid from "mermaid";
 import { useCallback, useEffect, useMemo, useRef } from "react";
+
 import { Button } from "~/components/Button";
 import { TransitionTable, useTransitionTable } from "~/components/automata";
 import ForwardButton from "~/components/automata/ForwardButton";

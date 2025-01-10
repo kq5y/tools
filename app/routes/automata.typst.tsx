@@ -1,6 +1,7 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 import { type FocusEvent, useMemo, useState } from "react";
+
 import {
   type Transition,
   TransitionTable,
