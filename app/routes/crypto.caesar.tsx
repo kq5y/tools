@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { useState } from "react";
+import { Button } from "~/components/Button";
 import { getMeta, getTitle } from "~/routes";
 
 export const meta: MetaFunction = () => {
@@ -50,13 +51,7 @@ export default function Caesar() {
           />
         </div>
         <div className="mb-2">
-          <button
-            type="button"
-            className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
-            onClick={handleEncrypt}
-          >
-            Encrypt
-          </button>
+          <Button onClick={handleEncrypt}>Encrypt</Button>
         </div>
         {results.length > 0 && (
           <div className="overflow-x-auto">

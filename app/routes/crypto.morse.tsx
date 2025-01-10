@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { useState } from "react";
+import { Button } from "~/components/Button";
 import { getMeta, getTitle } from "~/routes";
 
 export const meta: MetaFunction = () => {
@@ -152,20 +153,8 @@ export default function Morse() {
             />
           </div>
           <div className="flex flex-row gap-2 items-center">
-            <button
-              type="button"
-              className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
-              onClick={() => handleLetterApply(true)}
-            >
-              Apply↑
-            </button>
-            <button
-              type="button"
-              className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
-              onClick={() => handleLetterApply(false)}
-            >
-              Apply↓
-            </button>
+            <Button onClick={() => handleLetterApply(true)}>Apply↑</Button>
+            <Button onClick={() => handleLetterApply(false)}>Apply↓</Button>
           </div>
         </div>
         <div className="mb-2">

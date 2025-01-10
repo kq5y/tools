@@ -2,6 +2,7 @@ import elkLayouts from "@mermaid-js/layout-elk";
 import type { MetaFunction } from "@remix-run/cloudflare";
 import mermaid from "mermaid";
 import { useCallback, useEffect, useMemo, useRef } from "react";
+import { Button } from "~/components/Button";
 import { TransitionTable, useTransitionTable } from "~/components/automata";
 import ToTypstButton from "~/components/automata/ToTypstButton";
 import {
@@ -85,14 +86,9 @@ export default function NFA2DFA() {
     <div>
       <h1 className="text-2xl font-bold">{getTitle("automata", "nfa2dfa")}</h1>
       <TransitionTable hook={nfaHook}>
-        <button
-          type="button"
-          className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 disabled:bg-indigo-300 disabled:cursor-not-allowed"
-          disabled={!dfaConvertable}
-          onClick={convertDFA}
-        >
+        <Button disabled={!dfaConvertable} onClick={convertDFA}>
           Convert
-        </button>
+        </Button>
       </TransitionTable>
       <div className="my-2">
         <div className="flex flex-wrap gap-2">

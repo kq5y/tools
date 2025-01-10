@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { Button } from "../Button";
 
 interface Props {
   isNFA: boolean;
@@ -12,13 +13,5 @@ export default function ToTypstButton({ isNFA, textEditorString }: Props) {
     url.searchParams.set("q", encodeURIComponent(textEditorString));
     window.open(url.href, "_blank");
   }, [textEditorString, isNFA]);
-  return (
-    <button
-      type="button"
-      className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 disabled:bg-indigo-300 disabled:cursor-not-allowed"
-      onClick={onClick}
-    >
-      To Typst
-    </button>
-  );
+  return <Button onClick={onClick}>To Typst</Button>;
 }

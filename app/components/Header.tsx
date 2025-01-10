@@ -1,6 +1,6 @@
 import { Link } from "@remix-run/react";
 
-const Header = () => {
+export default function Header() {
   return (
     <header className="bg-indigo-950 text-white px-4 py-4">
       <div className="container mx-auto">
@@ -10,6 +10,4 @@ const Header = () => {
       </div>
     </header>
   );
-};
-
-export default Header;
+}

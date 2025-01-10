@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { Button, CrossButton, TabButton } from "../Button";
 import type {
   FocusConfig,
   Transition,
@@ -334,32 +335,20 @@ export default function TransitionTable({
       <div className="mb-2 border-b border-gray-200">
         <ul className="flex flex-wrap text-center">
           <li className="me-2">
-            <button
-              type="button"
-              className={`inline-block p-2 border-b-2 rounded-t-lg${
-                editorMode === "table"
-                  ? "text-indigo-600 hover:text-indigo-600 border-indigo-600"
-                  : "text-gray-500 hover:text-gray-600 border-gray-100 hover:border-gray-300"
-              }`}
+            <TabButton
+              selected={editorMode === "table"}
               onClick={() => setEditorMode("table")}
             >
               Table
-            </button>
+            </TabButton>
           </li>
           <li className="me-2">
-            <button
-              type="button"
-              className={`inline-block p-2 border-b-2 rounded-t-lg${
-                editorMode === "text"
-                  ? "text-indigo-600 hover:text-indigo-600 border-indigo-600"
-                  : "hover:text-gray-600 hover:border-gray-300"
-              }`}
-              onClick={() => {
-                setEditorMode("text");
-              }}
+            <TabButton
+              selected={editorMode === "text"}
+              onClick={() => setEditorMode("text")}
             >
               Text
-            </button>
+            </TabButton>
           </li>
         </ul>
       </div>
@@ -399,14 +388,11 @@ export default function TransitionTable({
                     >
                       {key}
                       {idx >= (isNFA ? 3 : 2) && (
-                        <button
-                          type="button"
-                          className="absolute right-3 inset-y-0 font-bold text-2xl text-red-600 hover:text-red-800 transition"
+                        <CrossButton
+                          className="absolute right-3 inset-y-0"
                           onClick={() => deleteOutput(key)}
                           disabled={readOnly}
-                        >
-                          x
-                        </button>
+                        />
                       )}
                     </th>
                   ))}
@@ -460,14 +446,10 @@ export default function TransitionTable({
                     ))}
                     <td className="border border-gray-300 text-center">
                       {tran.id !== 0 && (
-                        <button
-                          type="button"
-                          className="font-bold text-2xl text-red-600 hover:text-red-800 transition"
+                        <CrossButton
                           onClick={() => deleteTransition(tran.id)}
                           disabled={readOnly}
-                        >
-                          x
-                        </button>
+                        />
                       )}
                     </td>
                   </tr>
@@ -512,20 +494,8 @@ export default function TransitionTable({
           <div className="flex gap-2">
             {!readOnly && (
               <>
-                <button
-                  type="button"
-                  className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
-                  onClick={addTransition}
-                >
-                  Add Transition
-                </button>
-                <button
-                  type="button"
-                  className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
-                  onClick={addOutput}
-                >
-                  Add Output
-                </button>
+                <Button onClick={addTransition}>Add Transition</Button>
+                <Button onClick={addOutput}>Add Output</Button>
               </>
             )}
             {children}
@@ -541,14 +511,12 @@ export default function TransitionTable({
           />
           {!readOnly && (
             <div>
-              <button
-                type="button"
-                className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600 disabled:bg-indigo-300 disabled:cursor-not-allowed"
+              <Button
                 onClick={applyTextEditor}
                 disabled={!textEditorApplicable}
               >
                 Apply
-              </button>
+              </Button>
             </div>
           )}
         </div>

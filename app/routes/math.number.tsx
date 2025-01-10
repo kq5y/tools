@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { useMemo, useState } from "react";
+import { Button } from "~/components/Button";
 import { getMeta, getTitle } from "~/routes";
 
 export const meta: MetaFunction = () => {
@@ -98,13 +99,7 @@ export default function MathNumber() {
         <div className="mt-2 flex items-center gap-x-2">
           <div className="w-24" />
           <div className="mr-auto p-1">{numbers.b.length}bit</div>
-          <button
-            type="button"
-            className="px-3 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
-            onClick={handleClear}
-          >
-            Clear
-          </button>
+          <Button onClick={handleClear}>Clear</Button>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { useEffect, useMemo, useState } from "react";
+import { Button, CrossButton } from "~/components/Button";
 import { getMeta, getTitle } from "~/routes";
 
 export const meta: MetaFunction = () => {
@@ -194,13 +195,9 @@ export default function Dakoku() {
                         rowSpan={lecture.attendances.length}
                         className="sticky right-0 bg-white px-4 py-2 text-center"
                       >
-                        <button
-                          type="button"
+                        <CrossButton
                           onClick={() => handleDeleteLecture(lectureIndex)}
-                          className="font-bold text-2xl text-red-600 hover:text-red-800 transition"
-                        >
-                          x
-                        </button>
+                        />
                       </td>
                     )}
                   </tr>
@@ -226,13 +223,12 @@ export default function Dakoku() {
             value={addLectureTimes}
             onChange={(e) => setAddLectureTimes(Number(e.target.value))}
           />
-          <button
-            type="button"
+          <Button
             onClick={handleAddLecture}
-            className="bg-indigo-500 text-white px-4 rounded-r-md hover:bg-indigo-600 transition"
+            className="rounded-l-none rounded-r-md"
           >
             Add
-          </button>
+          </Button>
         </div>
         <div className="mb-2 overflow-x-auto">
           <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
@@ -282,13 +278,9 @@ export default function Dakoku() {
           </table>
         </div>
         <div className="mb-2">
-          <button
-            type="button"
-            onClick={handleResetData}
-            className="bg-rose-500 text-white px-4 py-2 rounded hover:bg-rose-600 transition"
-          >
+          <Button colorType="error" onClick={handleResetData}>
             Reset
-          </button>
+          </Button>
         </div>
       </div>
     </div>
