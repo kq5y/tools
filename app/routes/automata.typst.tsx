@@ -1,6 +1,6 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
-import { type FocusEvent, useMemo } from "react";
+import { type FocusEvent, useMemo, useState } from "react";
 import {
   type Transition,
   TransitionTable,
@@ -20,6 +20,7 @@ export const loader: LoaderFunction = ({ request }) => {
 };
 
 export default function Typst() {
+  const [useNodeName, setUseNodeName] = useState(false);
   const { type_: automataType, query: defaultTableString } = useLoaderData<{
     type_: string | null;
     query: string | null;
@@ -96,8 +97,11 @@ export default function Typst() {
       }
       return `      "${tran.id}": (${move.join(", ")}),`;
     };
-    return `#figure(\n  automaton(\n    (\n${automataHook.transitions.map(tran2tran).join("\n")}\n    ),\n    style: (\n      transition: (curve: 0.1),\n${cycleTranIds.map((id) => `      "${id}-${id}": (curve: 0),`).join("\n")}${cycleTranIds.length === 0 ? "" : "\n"}    ),\n    initial: "${initialId}",\n    final: (${finalIds.map((id) => `"${id}"`).join(", ")}),\n  ),\n)`;
-  }, [automataHook.transitions, automataHook.outputKeys]);
+    const tran2label = (tran: Transition) => {
+      return `      "${tran.id}": $${tran.node}$,`;
+    };
+    return `#figure(\n  automaton(\n    (\n${automataHook.transitions.map(tran2tran).join("\n")}\n    ),\n    style: (\n      transition: (curve: 0.1),\n${cycleTranIds.map((id) => `      "${id}-${id}": (curve: 0),`).join("\n")}${cycleTranIds.length === 0 ? "" : "\n"}    ),\n    initial: "${initialId}",\n    final: (${finalIds.map((id) => `"${id}"`).join(", ")}),\n${useNodeName ? `    labels: (\n${automataHook.transitions.map(tran2label).join("\n")}\n    ),\n` : ""}  ),\n)`;
+  }, [automataHook.transitions, automataHook.outputKeys, useNodeName]);
   const onFocus = async (ev: FocusEvent<HTMLTextAreaElement>) => {
     ev.target.select();
     await navigator.clipboard.writeText(ev.target.value);
@@ -151,6 +155,14 @@ export default function Typst() {
         </div>
         <div className="flex flex-col">
           <span>Automata</span>
+          <label className="flex gap-1">
+            <input
+              type="checkbox"
+              checked={useNodeName}
+              onChange={(e) => setUseNodeName(e.target.checked)}
+            />
+            Use node name as label
+          </label>
           <textarea
             className="w-full min-h-20 max-h-40 px-4 py-2"
             style={{ ["fieldSizing" as never]: "content" }}
