@@ -196,15 +196,6 @@ export default function TransitionTable({
       }, [] as Transition[])
     );
   };
-  const applyTableEditor = useCallback(() => {
-    let res = `|id|node|q0|F|${outputKeys.join("|")}|\n`;
-    res += `${"|---".repeat(4 + outputKeys.length)}|\n`;
-    for (const tran of transitions) {
-      res += `|${tran.id}|${tran.node}|${tran.initial}|${tran.final}|`;
-      res += `${outputKeys.map((key) => (tran.outputs[key] || []).join(",")).join("|")}|\n`;
-    }
-    setTextEditorString(res);
-  }, [transitions, outputKeys]);
   const textEditorApplicable = useMemo(() => {
     const rows = textEditorString.trim().split("\n");
     if (rows.length <= 2) return false;
@@ -315,6 +306,15 @@ export default function TransitionTable({
     }
   };
   useEffect(() => {
+    let res = `|id|node|q0|F|${outputKeys.join("|")}|\n`;
+    res += `${"|---".repeat(4 + outputKeys.length)}|\n`;
+    for (const tran of transitions) {
+      res += `|${tran.id}|${tran.node}|${tran.initial}|${tran.final}|`;
+      res += `${outputKeys.map((key) => (tran.outputs[key] || []).join(",")).join("|")}|\n`;
+    }
+    setTextEditorString(res);
+  }, [transitions, outputKeys]);
+  useEffect(() => {
     if (focusConfig.open) {
       document.addEventListener("mousedown", handleClickFocusOutside);
     } else {
@@ -355,7 +355,6 @@ export default function TransitionTable({
                   : "hover:text-gray-600 hover:border-gray-300"
               }`}
               onClick={() => {
-                applyTableEditor();
                 setEditorMode("text");
               }}
             >
