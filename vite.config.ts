@@ -25,4 +25,7 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
+  build: {
+    minify: "terser",
+  },
 });
