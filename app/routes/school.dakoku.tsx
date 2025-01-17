@@ -19,6 +19,26 @@ interface SaveData {
 
 const attendanceOptions: AttendanceStatus[] = ["o", "x", "-", "~"];
 
+const isSaveData = (data: unknown): data is SaveData => {
+  if (
+    typeof data !== "object" ||
+    data === null ||
+    !Array.isArray((data as SaveData).lectures)
+  ) {
+    return false;
+  }
+  return (data as SaveData).lectures.every(
+    (lecture) =>
+      typeof lecture.name === "string" &&
+      Array.isArray(lecture.attendances) &&
+      lecture.attendances.every(
+        (row) =>
+          Array.isArray(row) &&
+          row.every((status) => attendanceOptions.includes(status))
+      )
+  );
+};
+
 export default function Dakoku() {
   const [data, setData] = useState<SaveData>({ lectures: [] });
   const [addLectureName, setAddLectureName] = useState("");
@@ -32,7 +52,7 @@ export default function Dakoku() {
     const savedData = JSON.parse(
       localStorage.getItem("attendanceData") || '{"lectures": []}'
     );
-    setData(savedData);
+    if (isSaveData(savedData)) setData(savedData);
   }, []);
   const saveToLocalStorage = (data: SaveData) => {
     localStorage.setItem("attendanceData", JSON.stringify(data));
@@ -72,6 +92,36 @@ export default function Dakoku() {
     });
     setData((prevData) => ({ ...prevData, lectures: updatedLectures }));
     saveToLocalStorage({ ...data, lectures: updatedLectures });
+  };
+  const handleDownloadJSON = () => {
+    const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `dakoku${Date.now()}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+  const handleUploadJSON = () => {
+    if (!confirm("The data will be overwritten.")) return;
+    const reader = new FileReader();
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json,*";
+    input.onchange = (e) => {
+      const target = e.target as HTMLInputElement;
+      if (target?.files?.[0]) {
+        reader.readAsText(target.files[0]);
+      }
+    };
+    reader.onload = (e) => {
+      if (typeof e.target?.result !== "string") return;
+      const uploadData = JSON.parse(e.target.result);
+      if (isSaveData(uploadData)) setData(uploadData);
+    };
+    input.click();
   };
   const handleResetData = () => {
     if (!window.confirm("Are you sure you want to reset?")) return;
@@ -278,7 +328,9 @@ export default function Dakoku() {
             </tbody>
           </table>
         </div>
-        <div className="mb-2">
+        <div className="mb-2 flex gap-2">
+          <Button onClick={handleDownloadJSON}>Download CSV</Button>
+          <Button onClick={handleUploadJSON}>Upload CSV</Button>
           <Button colorType="error" onClick={handleResetData}>
             Reset
           </Button>
