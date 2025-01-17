@@ -33,11 +33,11 @@ interface LoaderReponseType {
   };
 }
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ context }) => {
   return Response.json({
     ENV: {
       PROD: import.meta.env.PROD,
-      CF_BEACON_TOKEN: import.meta.env.CF_BEACON_TOKEN,
+      CF_BEACON_TOKEN: context.cloudflare.env.CF_BEACON_TOKEN,
     },
   });
 };
