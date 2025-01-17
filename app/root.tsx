@@ -36,6 +36,13 @@ export function Layout({ children }: { children: ReactNode }) {
         />
         <Meta />
         <Links />
+        {import.meta.env.PROD && import.meta.env.CF_BEACON_TOKEN && (
+          <script
+            defer
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon={`{"token": "${import.meta.env.CF_BEACON_TOKEN}"}`}
+          />
+        )}
       </head>
       <body>
         <Header />
