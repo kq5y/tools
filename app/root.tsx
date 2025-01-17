@@ -1,10 +1,11 @@
-import type { LinksFunction } from "@remix-run/cloudflare";
+import type { LinksFunction, LoaderFunction } from "@remix-run/cloudflare";
 import {
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
 import type { ReactNode } from "react";
 
@@ -25,7 +26,24 @@ export const links: LinksFunction = () => [
   },
 ];
 
+interface LoaderReponseType {
+  ENV: {
+    PROD: boolean;
+    CF_BEACON_TOKEN?: string;
+  };
+}
+
+export const loader: LoaderFunction = async () => {
+  return Response.json({
+    ENV: {
+      PROD: import.meta.env.PROD,
+      CF_BEACON_TOKEN: import.meta.env.CF_BEACON_TOKEN,
+    },
+  });
+};
+
 export function Layout({ children }: { children: ReactNode }) {
+  const { ENV } = useLoaderData<typeof loader>() as LoaderReponseType;
   return (
     <html lang="ja">
       <head>
@@ -36,11 +54,11 @@ export function Layout({ children }: { children: ReactNode }) {
         />
         <Meta />
         <Links />
-        {import.meta.env.PROD && import.meta.env.CF_BEACON_TOKEN && (
+        {ENV.PROD && ENV.CF_BEACON_TOKEN && (
           <script
             defer
             src="https://static.cloudflareinsights.com/beacon.min.js"
-            data-cf-beacon={`{"token": "${import.meta.env.CF_BEACON_TOKEN}"}`}
+            data-cf-beacon={`{"token": "${ENV.CF_BEACON_TOKEN}"}`}
           />
         )}
       </head>
