@@ -123,6 +123,7 @@ export default function Morse() {
               type="text"
               className="border bg-white border-gray-300 p-2 flex-grow rounded-l w-12"
               placeholder="."
+              aria-label="Dot character input"
               value={tonLetter}
               onChange={(e) =>
                 handleLetterChange(e.target.value, tsuLetter, spaceLetter)
@@ -135,6 +136,7 @@ export default function Morse() {
               type="text"
               className="border bg-white border-gray-300 p-2 flex-grow rounded-l w-12"
               placeholder="-"
+              aria-label="Dash character input"
               value={tsuLetter}
               onChange={(e) =>
                 handleLetterChange(tonLetter, e.target.value, spaceLetter)
@@ -147,6 +149,7 @@ export default function Morse() {
               type="text"
               className="border bg-white border-gray-300 p-2 flex-grow rounded-l w-12"
               placeholder=" "
+              aria-label="Space character input"
               value={spaceLetter}
               onChange={(e) =>
                 handleLetterChange(tonLetter, tsuLetter, e.target.value)

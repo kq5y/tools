@@ -77,6 +77,7 @@ export default function Vigenere() {
             type="text"
             className="border bg-white border-gray-300 p-2 flex-grow rounded-l"
             placeholder="Key"
+            aria-label="Vigenere cipher key"
             value={usingKey}
             onChange={(e) => setUsingKey(e.target.value)}
           />

@@ -78,6 +78,7 @@ export default function RailFence() {
             type="number"
             className="border bg-white border-gray-300 p-2 flex-grow rounded-l"
             placeholder="Rails Count"
+            aria-label="Number of rails"
             value={usingRails}
             min={1}
             onChange={(e) => setUsingRails(Number(e.target.value))}

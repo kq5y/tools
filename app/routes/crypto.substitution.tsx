@@ -83,6 +83,7 @@ export default function Substitution() {
                 onFocus={(e) => e.target.select()}
                 onChange={(e) => handleMappingChange(letter, e.target.value)}
                 className="w-8 p-1 border text-center"
+                aria-label={`Substitution for ${letter.toUpperCase()}`}
               />
             </div>
           ))}

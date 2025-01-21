@@ -92,6 +92,7 @@ export default function MathNumber() {
                 className="flex-1 border rounded p-1"
                 value={numbers[base.id]}
                 pattern={base.pattern}
+                aria-label={`${base.name} number input`}
                 onChange={(e) => handleValueChange(e.target.value, base)}
               />
             </div>

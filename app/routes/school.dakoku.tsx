@@ -263,6 +263,7 @@ export default function Dakoku() {
             placeholder="Lecture name"
             className="border bg-white border-gray-300 p-2 flex-grow rounded-l-md"
             value={addLectureName}
+            aria-label="New lecture name"
             onChange={(e) => setAddLectureName(e.target.value)}
           />
           <input
@@ -271,6 +272,7 @@ export default function Dakoku() {
             className="border bg-white border-gray-300 p-2 flex-grow"
             min={1}
             max={7}
+            aria-label="Number of lecture times"
             value={addLectureTimes}
             onChange={(e) => setAddLectureTimes(Number(e.target.value))}
           />
