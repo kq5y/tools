@@ -67,6 +67,12 @@ const routes: ToolRoot[] = [
     title: "Base Conversion",
     desc: "Convert number base",
   },
+  {
+    cat: "other",
+    slug: "ant",
+    title: "Langton's Ant",
+    desc: "Langton's Ant Simulation",
+  },
 ];
 
 function getMeta(cat: string, slug: string) {
