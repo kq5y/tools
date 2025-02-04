@@ -190,6 +190,70 @@ function* countingSort(initial: number[]): Generator<SortStep> {
   yield { bars: output.slice(), comparisons: [] };
 }
 
+function* combSort(initial: number[]): Generator<SortStep> {
+  const arr = initial.slice();
+  let gap = arr.length;
+  let swapped = true;
+  while (gap > 1 || swapped) {
+    gap = Math.max(1, Math.floor(gap / 1.3));
+    swapped = false;
+    for (let i = 0; i + gap < arr.length; i++) {
+      yield { bars: arr.slice(), comparisons: [i, i + gap] };
+      if (arr[i] > arr[i + gap]) {
+        [arr[i], arr[i + gap]] = [arr[i + gap], arr[i]];
+        swapped = true;
+        yield { bars: arr.slice(), comparisons: [i, i + gap] };
+      }
+    }
+  }
+  yield { bars: arr.slice(), comparisons: [] };
+}
+
+function* radixSort(initial: number[]): Generator<SortStep> {
+  const arr = initial.slice();
+  const max = Math.max(...arr);
+  let exp = 1;
+  while (Math.floor(max / exp) > 0) {
+    const output = new Array(arr.length).fill(0);
+    const count = new Array(10).fill(0);
+    for (let i = 0; i < arr.length; i++) {
+      count[Math.floor(arr[i] / exp) % 10]++;
+    }
+    for (let i = 1; i < 10; i++) {
+      count[i] += count[i - 1];
+    }
+    for (let i = arr.length - 1; i >= 0; i--) {
+      output[--count[Math.floor(arr[i] / exp) % 10]] = arr[i];
+      yield { bars: output.slice(), comparisons: [i] };
+    }
+    for (let i = 0; i < arr.length; i++) {
+      arr[i] = output[i];
+    }
+    exp *= 10;
+  }
+  yield { bars: arr.slice(), comparisons: [] };
+}
+
+function* shellSort(initial: number[]): Generator<SortStep> {
+  const arr = initial.slice();
+  let gap = Math.floor(arr.length / 2);
+  while (gap > 0) {
+    for (let i = gap; i < arr.length; i++) {
+      const temp = arr[i];
+      let j = i;
+      while (j >= gap && arr[j - gap] > temp) {
+        yield { bars: arr.slice(), comparisons: [j, j - gap] };
+        arr[j] = arr[j - gap];
+        j -= gap;
+      }
+      arr[j] = temp;
+      yield { bars: arr.slice(), comparisons: [j] };
+    }
+    gap = Math.floor(gap / 2);
+  }
+  yield { bars: arr.slice(), comparisons: [] };
+}
+
 const sortingAlgorithms: {
   [key: string]: {
     name: string;
@@ -219,6 +283,18 @@ const sortingAlgorithms: {
   counting: {
     name: "Counting Sort",
     gen: countingSort,
+  },
+  comb: {
+    name: "Comb Sort",
+    gen: combSort,
+  },
+  radix: {
+    name: "Radix Sort",
+    gen: radixSort,
+  },
+  shell: {
+    name: "Shell Sort",
+    gen: shellSort,
   },
 };
 
