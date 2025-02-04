@@ -73,6 +73,12 @@ const routes: ToolRoot[] = [
     title: "Langton's Ant",
     desc: "Langton's Ant Simulation",
   },
+  {
+    cat: "simulation",
+    slug: "sorting",
+    title: "Sorting Simulation",
+    desc: "Visualization of sorting algorithms",
+  },
 ];
 
 function getMeta(cat: string, slug: string) {
