@@ -68,7 +68,7 @@ const routes: ToolRoot[] = [
     desc: "Convert number base",
   },
   {
-    cat: "other",
+    cat: "simulation",
     slug: "ant",
     title: "Langton's Ant",
     desc: "Langton's Ant Simulation",

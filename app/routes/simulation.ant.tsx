@@ -5,7 +5,7 @@ import { Button } from "~/components/Button";
 import { getMeta, getTitle } from "~/routes";
 
 export const meta: MetaFunction = () => {
-  return getMeta("other", "ant");
+  return getMeta("simulation", "ant");
 };
 
 const GRID_WIDTH = 160;
@@ -146,7 +146,7 @@ export default function LangtonsAnt() {
   }, [drawGrid]);
   return (
     <div>
-      <h1 className="text-2xl font-bold">{getTitle("other", "ant")}</h1>
+      <h1 className="text-2xl font-bold">{getTitle("simulation", "ant")}</h1>
       <div className="p-2">
         <div className="flex space-x-2 mb-2">
           <div>Generation: {generation}, </div>
