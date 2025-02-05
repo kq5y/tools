@@ -1,4 +1,4 @@
-import type { LinksFunction, LoaderFunction } from "@remix-run/cloudflare";
+import type { LoaderFunction } from "@remix-run/cloudflare";
 import {
   Links,
   Meta,
@@ -12,19 +12,6 @@ import type { ReactNode } from "react";
 import Header from "~/components/Header";
 
 import "./tailwind.css";
-
-export const links: LinksFunction = () => [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap",
-  },
-];
 
 interface LoaderReponseType {
   ENV: {
