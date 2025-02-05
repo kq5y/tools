@@ -18,14 +18,17 @@
   },
   "dependencies": {
     "@mermaid-js/layout-elk": "^0.1.7",
-    "@napi-rs/canvas": "^0.1.66",
     "@remix-run/cloudflare": "^2.15.3",
-    "@remix-run/cloudflare-pages": "^2.15.3",
     "@remix-run/react": "^2.15.3",
+    "@remix-run/server-runtime": "^2.15.3",
+    "hono": "^4.6.20",
     "isbot": "^4.4.0",
     "mermaid": "^11.4.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "satori": "^0.12.1",
+    "svg2png-wasm": "^1.4.1",
+    "yoga-wasm-web": "^0.3.3"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
@@ -39,8 +42,10 @@
     "terser": "^5.37.0",
     "typescript": "^5.7.3",
     "vite": "^5.4.14",
+    "vite-plugin-top-level-await": "^1.4.4",
+    "vite-plugin-wasm": "^3.4.1",
     "vite-tsconfig-paths": "^4.3.2",
-    "wrangler": "3.57.1"
+    "wrangler": "3.107.3"
   },
   "engines": {
     "node": ">=20.0.0"

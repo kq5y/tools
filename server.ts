@@ -5,6 +5,7 @@ import { contextStorage, getContext } from "hono/context-storage";
 import * as build from "./build/server";
 import { getLoadContext } from "./load-context";
 
+import { generateOgImage } from "~/libs/ogp";
 import { getTitle } from "~/routes";
 
 const handleRemixRequest = createRequestHandler(build as any as ServerBuild);
@@ -26,6 +27,27 @@ app.use(async (_c, next) => {
     });
   }
   return next();
+});
+
+app.get("/api/ogp", async (c) => {
+  const { cat, slug } = c.req.query();
+  if (!cat || !slug) {
+    return c.body("Not Found", { status: 404 });
+  }
+  const title = getTitle(cat, slug);
+  if (!title) {
+    return c.body("Not Found", { status: 404 });
+  }
+  const ogp = await generateOgImage(cat, slug, title);
+  if (!ogp) {
+    return c.body("Not Found", { status: 404 });
+  }
+  return c.body(ogp, {
+    headers: {
+      "Content-Type": "image/png",
+      "Cache-Control": "public, max-age=31536000, immutable",
+    },
+  });
 });
 
 app.all("*", async (c) => {
