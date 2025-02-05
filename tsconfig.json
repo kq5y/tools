@@ -1,5 +1,7 @@
 {
   "include": [
+    "worker-configuration.d.ts",
+    "env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "**/.server/**/*.ts",
@@ -8,7 +10,7 @@
     "**/.client/**/*.tsx"
   ],
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "types": [
       "@remix-run/cloudflare",
       "vite/client",
@@ -17,10 +19,10 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
-    "module": "ESNext",
+    "module": "ES2022",
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
-    "target": "ESNext",
+    "target": "ES2022",
     "strict": true,
     "allowJs": true,
     "skipLibCheck": true,
@@ -30,7 +32,7 @@
       "~/*": ["./app/*"]
     },
 
-    // Vite takes care of building everything, not tsc.
+    // Remix takes care of building everything in `remix build`.
     "noEmit": true
   }
 }
