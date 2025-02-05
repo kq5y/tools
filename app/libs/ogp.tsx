@@ -4,7 +4,7 @@ import wasm from "svg2png-wasm/svg2png_wasm_bg.wasm";
 import initYoga from "yoga-wasm-web";
 import yogaWasm from "yoga-wasm-web/dist/yoga.wasm";
 
-import { SITE_TITLE } from "~/const";
+import { SITE_TITLE, SITE_URL } from "~/const";
 
 const WIDTH = 1200;
 const HEIGHT = 630;
@@ -22,18 +22,10 @@ const genModuleInit = () => {
 };
 const moduleInit = genModuleInit();
 
-async function fetchFont(name: string, url: string) {
-  const data = await fetch(url);
-  return {
-    name,
-    data: await data.arrayBuffer(),
-  };
-}
-
 async function getFonts(name: string, fonts: [string, Font["weight"]][]) {
   return await Promise.all(
     fonts.map(async ([filename, weight]) => {
-      const data = await fetch(`http://localhost:8787/fonts/${filename}.woff`);
+      const data = await fetch(`${SITE_URL}/fonts/${filename}.woff`);
       return {
         name,
         data: await data.arrayBuffer(),
