@@ -1,3 +1,5 @@
+import { SITE_URL } from "./const";
+
 interface ToolRoot {
   cat: string;
   slug: string;
@@ -85,20 +87,23 @@ function getMeta(cat: string, slug: string) {
   const route = routes.filter(
     (route) => route.cat === cat && route.slug === slug
   )[0];
+  const ogImageUrl = `${SITE_URL}/api/ogp?cat=${cat}&slug=${slug}`;
   return [
     { title: `${route.title} | /${cat}/${slug}` },
     {
       name: "description",
       content: route.desc,
     },
+    { property: "og:image", content: ogImageUrl },
+    { name: "twitter:image", content: ogImageUrl },
   ];
 }
 
-function getTitle(cat: string, slug: string) {
+function getTitle(cat: string, slug: string): string | null {
   const route = routes.filter(
     (route) => route.cat === cat && route.slug === slug
-  )[0];
-  return route.title;
+  );
+  return route.length === 0 ? null : route[0].title;
 }
 
 export { routes, getMeta, getTitle, type ToolRoot };
