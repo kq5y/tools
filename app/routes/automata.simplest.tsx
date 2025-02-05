@@ -1,4 +1,4 @@
-import elkLayouts from "@mermaid-js/layout-elk";
+//import elkLayouts from "@mermaid-js/layout-elk";
 import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 import mermaid from "mermaid";
@@ -90,14 +90,14 @@ export default function Simplest() {
     }
   };
   useEffect(() => {
-    mermaid.registerLayoutLoaders(elkLayouts);
+    //mermaid.registerLayoutLoaders(elkLayouts);
     mermaid.initialize({
       startOnLoad: false,
-      layout: "elk",
-      elk: {
-        nodePlacementStrategy: "NETWORK_SIMPLEX",
-        cycleBreakingStrategy: "MODEL_ORDER",
-      },
+      //layout: "elk",
+      //elk: {
+      //  nodePlacementStrategy: "NETWORK_SIMPLEX",
+      //  cycleBreakingStrategy: "MODEL_ORDER",
+      //},
     });
   }, []);
   return (

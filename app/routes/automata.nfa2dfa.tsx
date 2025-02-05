@@ -1,4 +1,4 @@
-import elkLayouts from "@mermaid-js/layout-elk";
+//import elkLayouts from "@mermaid-js/layout-elk";
 import type { MetaFunction } from "@remix-run/cloudflare";
 import mermaid from "mermaid";
 import { useCallback, useEffect, useMemo, useRef } from "react";
@@ -73,14 +73,14 @@ export default function NFA2DFA() {
     }
   };
   useEffect(() => {
-    mermaid.registerLayoutLoaders(elkLayouts);
+    //mermaid.registerLayoutLoaders(elkLayouts);
     mermaid.initialize({
       startOnLoad: false,
-      layout: "elk",
-      elk: {
-        nodePlacementStrategy: "NETWORK_SIMPLEX",
-        cycleBreakingStrategy: "MODEL_ORDER",
-      },
+      //layout: "elk",
+      //elk: {
+      //  nodePlacementStrategy: "NETWORK_SIMPLEX",
+      //  cycleBreakingStrategy: "MODEL_ORDER",
+      //},
     });
   }, []);
   return (
