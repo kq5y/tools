@@ -4,8 +4,13 @@
  * For more information, see https://remix.run/file-conventions/entry.server
  */
 
-import type { AppLoadContext, EntryContext } from "@remix-run/cloudflare";
-import { RemixServer } from "@remix-run/react";
+import type {
+  ActionFunctionArgs,
+  AppLoadContext,
+  EntryContext,
+  LoaderFunctionArgs,
+} from "@remix-run/cloudflare";
+import { RemixServer, isRouteErrorResponse } from "@remix-run/react";
 import { isbot } from "isbot";
 import { renderToReadableStream } from "react-dom/server";
 
@@ -53,4 +58,17 @@ export default async function handleRequest(
     headers: responseHeaders,
     status: responseStatusCode,
   });
+}
+
+export function handleError(
+  error: unknown,
+  { request }: LoaderFunctionArgs | ActionFunctionArgs
+) {
+  if (
+    (isRouteErrorResponse(error) && error.status === 404) ||
+    request.signal.aborted
+  ) {
+    return;
+  }
+  console.error(error);
 }

@@ -5,7 +5,9 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
+  isRouteErrorResponse,
+  useRouteError,
+  useRouteLoaderData,
 } from "@remix-run/react";
 import type { ReactNode } from "react";
 
@@ -30,7 +32,9 @@ export const loader: LoaderFunction = async ({ context }) => {
 };
 
 export function Layout({ children }: { children: ReactNode }) {
-  const { ENV } = useLoaderData<typeof loader>() as LoaderReponseType;
+  const loaderData = useRouteLoaderData<typeof loader>("root") as
+    | LoaderReponseType
+    | undefined;
   return (
     <html lang="ja">
       <head>
@@ -41,11 +45,11 @@ export function Layout({ children }: { children: ReactNode }) {
         />
         <Meta />
         <Links />
-        {ENV.PROD && ENV.CF_BEACON_TOKEN && (
+        {loaderData?.ENV.PROD && loaderData?.ENV.CF_BEACON_TOKEN && (
           <script
             defer
             src="https://static.cloudflareinsights.com/beacon.min.js"
-            data-cf-beacon={`{"token": "${ENV.CF_BEACON_TOKEN}"}`}
+            data-cf-beacon={`{"token": "${loaderData.ENV.CF_BEACON_TOKEN}"}`}
           />
         )}
       </head>
@@ -61,4 +65,12 @@ export function Layout({ children }: { children: ReactNode }) {
 
 export default function App() {
   return <Outlet />;
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  if (isRouteErrorResponse(error)) {
+    return <h1 className="text-2xl font-bold">Not Found</h1>;
+  }
+  return <h1 className="text-2xl font-bold">Oops! An error occurred!</h1>;
 }
