@@ -93,6 +93,11 @@ function getMeta(cat: string, slug: string) {
       content: route.desc,
     },
     { property: "og:image", content: ogImageUrl },
+    { property: "og:title", content: `${route.title} | /${cat}/${slug}` },
+    { property: "og:description", content: route.desc },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:title", content: `${route.title} | /${cat}/${slug}` },
+    { name: "twitter:description", content: route.desc },
     { name: "twitter:image", content: ogImageUrl },
   ];
 }
