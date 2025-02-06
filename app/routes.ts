@@ -1,5 +1,3 @@
-import { SITE_URL } from "./const";
-
 interface ToolRoot {
   cat: string;
   slug: string;
@@ -87,7 +85,7 @@ function getMeta(cat: string, slug: string) {
   const route = routes.filter(
     (route) => route.cat === cat && route.slug === slug
   )[0];
-  const ogImageUrl = `${SITE_URL}/api/ogp?cat=${cat}&slug=${slug}`;
+  const ogImageUrl = `https://ogp.t3x.jp/tools/image.png?cat=${cat}&slug=${slug}&title=${encodeURIComponent(route.title)}`;
   return [
     { title: `${route.title} | /${cat}/${slug}` },
     {
