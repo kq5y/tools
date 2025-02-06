@@ -14,3 +14,10 @@ Implementing various tools using remix.
   - dakoku
 - automata
   - simplest
+  - nfa2dfa
+  - typst
+- math
+  - number
+- simulation
+  - ant
+  - sorting
