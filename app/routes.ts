@@ -79,6 +79,12 @@ const routes: ToolRoot[] = [
     title: "Base Conversion",
     desc: "Convert number base",
   },
+  {
+    cat: "misc",
+    slug: "count",
+    title: "Character Count",
+    desc: "Count the number of characters",
+  },
 ];
 
 function getMeta(cat: string, slug: string) {
