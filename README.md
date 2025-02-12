@@ -16,8 +16,9 @@ Implementing various tools using remix.
   - simplest
   - nfa2dfa
   - typst
-- math
-  - number
 - simulation
   - ant
   - sorting
+- misc
+  - number
+  - count
