@@ -18,30 +18,32 @@ export default function Index() {
     {} as Record<string, ToolRoot[]>
   );
   return (
-    <div>
-      <h1 className="text-2xl font-bold">Tools</h1>
-      {Object.keys(rootmap).map((cat) => (
-        <div key={cat} className="px-2 py-1">
-          <div className="text-xl font-semibold text-indigo-950">/{cat}</div>
-          <div className="flex flex-col">
-            {rootmap[cat].map((r) => (
-              <div
-                key={`/${cat}/${r.slug}`}
-                className="flex gap-x-1 px-4 items-baseline"
-              >
-                <Link
-                  to={`/${cat}/${r.slug}`}
-                  className="text-lg font-bold text-indigo-950 whitespace-nowrap"
+    <div className="max-w-7xl mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-4">Tools</h1>
+      <div className="space-y-4">
+        {Object.keys(rootmap).map((cat) => (
+          <section key={cat} className="bg-white rounded-lg shadow-sm p-4">
+            <h2 className="text-xl font-semibold text-indigo-950 mb-2">
+              /{cat}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {rootmap[cat].map((r) => (
+                <div
+                  key={`/${cat}/${r.slug}`}
+                  className="bg-gray-50 rounded-lg p-2 hover:bg-gray-100 transition-colors"
                 >
-                  /{r.slug}
-                </Link>
-                <span className="text-gray-500 text-sm">:</span>
-                <span className="text-gray-600 text-sm">{r.desc}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
+                  <Link to={`/${cat}/${r.slug}`} className="block">
+                    <div className="text-lg font-bold text-indigo-950">
+                      /{r.slug}
+                    </div>
+                    <div className="text-gray-600 text-sm mt-1">{r.desc}</div>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
     </div>
   );
 }
