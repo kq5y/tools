@@ -4,10 +4,7 @@ import { Link } from "@remix-run/react";
 import { type ToolRoot, routes } from "~/routes";
 
 export const meta: MetaFunction = () => {
-  return [
-    { title: "tools" },
-    { name: "description", content: "tksnn's tools" },
-  ];
+  return [{ title: "Tools" }, { name: "description", content: "kq5y's tools" }];
 };
 
 export default function Index() {

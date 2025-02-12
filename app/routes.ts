@@ -93,17 +93,17 @@ function getMeta(cat: string, slug: string) {
   )[0];
   const ogImageUrl = `https://ogp.t3x.jp/tools/image.png?cat=${cat}&slug=${slug}&title=${encodeURIComponent(route.title)}`;
   return [
-    { title: `${route.title} | /${cat}/${slug}` },
+    { title: `${route.title} | Tools` },
     {
       name: "description",
       content: route.desc,
     },
     { property: "og:image", content: ogImageUrl },
-    { property: "og:title", content: `${route.title} | /${cat}/${slug}` },
+    { property: "og:title", content: `${route.title} | Tools` },
     { property: "og:description", content: route.desc },
     { property: "og:type", content: "article" },
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: `${route.title} | /${cat}/${slug}` },
+    { name: "twitter:title", content: `${route.title} | Tools` },
     { name: "twitter:description", content: route.desc },
     { name: "twitter:image", content: ogImageUrl },
   ];
