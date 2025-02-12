@@ -2,6 +2,7 @@ import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 import { type FocusEvent, useMemo, useState } from "react";
 
+import { Checkbox } from "~/components/Checkbox";
 import {
   type Transition,
   TransitionTable,
@@ -162,22 +163,18 @@ export default function Typst() {
         </div>
         <div className="flex flex-col">
           <span>Automata</span>
-          <label className="flex gap-1">
-            <input
-              type="checkbox"
-              checked={useNodeName}
-              onChange={(e) => setUseNodeName(e.target.checked)}
-            />
+          <Checkbox
+            checked={useNodeName}
+            onChange={(e) => setUseNodeName(e.target.checked)}
+          >
             Use node name as label
-          </label>
-          <label className="flex gap-1">
-            <input
-              type="checkbox"
-              checked={addLayout}
-              onChange={(e) => setAddLayout(e.target.checked)}
-            />
+          </Checkbox>
+          <Checkbox
+            checked={addLayout}
+            onChange={(e) => setAddLayout(e.target.checked)}
+          >
             Add layout field
-          </label>
+          </Checkbox>
           <textarea
             className="w-full min-h-20 max-h-40 px-4 py-2"
             style={{ ["fieldSizing" as never]: "content" }}

@@ -1,6 +1,7 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { useMemo, useState } from "react";
 
+import { Checkbox } from "~/components/Checkbox";
 import { getMeta, getTitle } from "~/routes";
 
 export const meta: MetaFunction = () => {
@@ -107,14 +108,13 @@ export default function Substitution() {
             )}
           </code>
         </div>
-        <div className="mb-2 flex flex-row gap-2">
-          <input
-            type="checkbox"
-            id="textWrapCheckbox"
+        <div className="mb-2">
+          <Checkbox
             checked={enableTextWrap}
             onChange={(e) => setEnableTextWrap(e.target.checked)}
-          />
-          <label htmlFor="textWrapCheckbox">text wrap</label>
+          >
+            text wrap
+          </Checkbox>
         </div>
         <div className="mb-2">
           <div className="flex flex-wrap gap-x-4">

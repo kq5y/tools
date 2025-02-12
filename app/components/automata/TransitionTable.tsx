@@ -9,6 +9,7 @@ import {
 } from "react";
 
 import { Button, CrossButton, TabButton } from "../Button";
+import { Checkbox } from "../Checkbox";
 import type {
   FocusConfig,
   Transition,
@@ -416,16 +417,14 @@ export default function TransitionTable({
                       />
                     </td>
                     <td className="border border-gray-300 text-center">
-                      <input
-                        type="checkbox"
+                      <Checkbox
                         checked={tran.initial}
                         onChange={(ev) => onTranInitialChange(ev, index)}
                         disabled={readOnly}
                       />
                     </td>
                     <td className="border border-gray-300 text-center">
-                      <input
-                        type="checkbox"
+                      <Checkbox
                         checked={tran.final}
                         onChange={(ev) => onTranFinalChange(ev, index)}
                         disabled={readOnly}
@@ -469,22 +468,16 @@ export default function TransitionTable({
                   <ul>
                     {transitions.map((otran) => (
                       <li className="flex gap-2" key={otran.id}>
-                        <input
-                          type="checkbox"
-                          id={`focusCheckbox${otran.id}`}
+                        <Checkbox
                           checked={(
                             transitions[focusConfig.index].outputs[
                               focusConfig.key
                             ] || []
                           ).includes(otran.id)}
                           onChange={() => onOutputChange(otran.id)}
-                        />
-                        <label
-                          className="flex-1"
-                          htmlFor={`focusCheckbox${otran.id}`}
                         >
                           {otran.id}: {otran.node}
-                        </label>
+                        </Checkbox>
                       </li>
                     ))}
                   </ul>

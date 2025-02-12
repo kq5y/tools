@@ -2,6 +2,7 @@ import type { MetaFunction } from "@remix-run/cloudflare";
 import { type ChangeEvent, useMemo, useState } from "react";
 
 import { Button } from "~/components/Button";
+import { Checkbox } from "~/components/Checkbox";
 import { getMeta, getTitle } from "~/routes";
 
 export const meta: MetaFunction = () => {
@@ -57,14 +58,13 @@ export default function Count() {
         <div className="flex gap-2 mt-2">
           <Button onClick={handleCount}>Count</Button>
           <Button onClick={handleClear}>Clear</Button>
-          <label className="flex gap-1 ml-2 items-center">
-            <input
-              type="checkbox"
-              checked={realtime}
-              onChange={(e) => setRealtime(e.target.checked)}
-            />
+          <Checkbox
+            className="ml-2"
+            checked={realtime}
+            onChange={(e) => setRealtime(e.target.checked)}
+          >
             Realtime
-          </label>
+          </Checkbox>
         </div>
         <div className="flex flex-col gap-1 mt-2">
           {Object.entries(counts).map(([key, value]) => (
