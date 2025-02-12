@@ -5,7 +5,7 @@ import { Button } from "~/components/Button";
 import { getMeta, getTitle } from "~/routes";
 
 export const meta: MetaFunction = () => {
-  return getMeta("math", "number");
+  return getMeta("misc", "number");
 };
 
 const NUMBER_BASES = [
@@ -81,7 +81,7 @@ export default function MathNumber() {
   };
   return (
     <div>
-      <h1 className="text-2xl font-bold">{getTitle("math", "number")}</h1>
+      <h1 className="text-2xl font-bold">{getTitle("misc", "number")}</h1>
       <div className="p-2">
         <div className="flex flex-col gap-1">
           {NUMBER_BASES.map((base) => (

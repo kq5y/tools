@@ -62,12 +62,6 @@ const routes: ToolRoot[] = [
     desc: "Convert to automata notation on Typst",
   },
   {
-    cat: "math",
-    slug: "number",
-    title: "Base Conversion",
-    desc: "Convert number base",
-  },
-  {
     cat: "simulation",
     slug: "ant",
     title: "Langton's Ant",
@@ -78,6 +72,12 @@ const routes: ToolRoot[] = [
     slug: "sorting",
     title: "Sorting Simulation",
     desc: "Visualization of sorting algorithms",
+  },
+  {
+    cat: "misc",
+    slug: "number",
+    title: "Base Conversion",
+    desc: "Convert number base",
   },
 ];
 
