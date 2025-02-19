@@ -3,6 +3,7 @@ import {
   vitePlugin as remix,
 } from "@remix-run/dev";
 import { defineConfig } from "vite";
+import { cjsInterop } from "vite-plugin-cjs-interop";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 import { getLoadContext } from "./load-context";
@@ -26,6 +27,9 @@ export default defineConfig({
         v3_singleFetch: true,
         v3_lazyRouteDiscovery: true,
       },
+    }),
+    cjsInterop({
+      dependencies: ["react-to-print"],
     }),
     tsconfigPaths(),
   ],

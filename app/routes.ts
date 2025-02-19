@@ -85,6 +85,12 @@ const routes: ToolRoot[] = [
     title: "Character Count",
     desc: "Count the number of characters",
   },
+  {
+    cat: "misc",
+    slug: "atena",
+    title: "Atena Generator",
+    desc: "Create address for envelope",
+  },
 ];
 
 function getMeta(cat: string, slug: string) {
