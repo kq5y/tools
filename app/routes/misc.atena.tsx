@@ -29,6 +29,19 @@ interface Address {
   enclosure: string;
 }
 
+const isSaveData = (data: unknown): data is Address[] =>
+  Array.isArray(data) &&
+  data.every(
+    (addr) =>
+      typeof addr.code === "string" &&
+      Array.isArray(addr.address) &&
+      addr.address.every((line: unknown) => typeof line === "string") &&
+      typeof addr.company === "string" &&
+      typeof addr.name === "string" &&
+      typeof addr.title === "string" &&
+      typeof addr.enclosure === "string"
+  );
+
 export default function Atena() {
   const printRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({
@@ -103,6 +116,38 @@ export default function Atena() {
   };
   const insertHyphen = (code: string) => {
     return code.replace(/(\d{3})(\d{4})/, "$1-$2");
+  };
+  const handleDownload = () => {
+    const blob = new Blob([JSON.stringify(addressList)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `atena${Date.now()}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+  const handleUpload = () => {
+    if (!confirm("The data will be overwritten.")) return;
+    const reader = new FileReader();
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json,*";
+    input.onchange = (e) => {
+      const target = e.target as HTMLInputElement;
+      if (target?.files?.[0]) {
+        reader.readAsText(target.files[0]);
+      }
+    };
+    reader.onload = (e) => {
+      if (typeof e.target?.result !== "string") return;
+      const uploadData = JSON.parse(e.target.result);
+      if (isSaveData(uploadData)) setAddressList(uploadData);
+    };
+    input.click();
   };
   return (
     <div>
@@ -212,6 +257,10 @@ export default function Atena() {
       </div>
       <div className="my-2 flex items-center gap-x-4">
         <h2 className="text-lg font-bold mr-auto">Address List</h2>
+        <Button onClick={handleDownload} disabled={addressList.length === 0}>
+          Download
+        </Button>
+        <Button onClick={handleUpload}>Upload</Button>
         <Button
           onClick={() => handlePrint()}
           disabled={addressList.length === 0}
