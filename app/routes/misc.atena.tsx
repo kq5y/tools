@@ -282,7 +282,7 @@ export default function Atena() {
                   <br />
                   {[
                     addr.company,
-                    `${addr.name}${addr.title.length > 0 ? `　${addr.title}` : ""}`,
+                    `${addr.name.replace(/\s/g, "　")}${addr.title.length > 0 ? `　${addr.title}` : ""}`,
                   ].join(" ")}
                   {addr.enclosure && (
                     <div className="inline-block text-sm text-red-500 ml-4">
@@ -318,7 +318,7 @@ export default function Atena() {
               key={`card-${addr.code}-${index}`}
             >
               <p
-                className="text-base font-bold mb-1"
+                className="text-base mb-1"
                 style={{ fontFamily: "ui-sans-serif, sans-serif" }}
               >
                 <span className="text-sm mr-1">〒</span>
@@ -333,7 +333,7 @@ export default function Atena() {
                 <p className="mt-1">{addr.company}</p>
               )}
               <p className={addr.company.length > 0 ? "" : "mt-1"}>
-                {addr.name}　{addr.title}
+                {addr.name.replace(/\s/g, "　")}　{addr.title}
               </p>
               {addr.enclosure && (
                 <div className="mt-2 ml-auto px-2 py-1 border-2 border-red-500">
