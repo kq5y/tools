@@ -103,6 +103,7 @@ export default function Atena() {
               onChange={handleRecipientChange}
               className="w-full p-1 border border-gray-300 rounded"
               maxLength={8}
+              aria-label="Zip Code"
             />
           </label>
           <div className="col-span-2 flex items-center gap-x-2">
@@ -119,6 +120,7 @@ export default function Atena() {
                 onChange={(e) => handleRecipientAddressChange(e, i)}
                 className="w-full p-1 border border-gray-300 rounded"
                 maxLength={21}
+                aria-label="Address"
               />
             </label>
           ))}
@@ -131,6 +133,7 @@ export default function Atena() {
               onChange={handleRecipientChange}
               className="w-full p-1 border border-gray-300 rounded"
               maxLength={21}
+              aria-label="Company"
             />
           </label>
           <label className="col-span-5">
@@ -142,6 +145,7 @@ export default function Atena() {
               onChange={handleRecipientChange}
               className="w-full p-1 border border-gray-300 rounded"
               maxLength={19}
+              aria-label="Name"
             />
           </label>
           <label className="col-span-1">
@@ -153,6 +157,7 @@ export default function Atena() {
               onChange={handleRecipientChange}
               className="w-full p-1 border border-gray-300 rounded"
               maxLength={2}
+              aria-label="Title"
             />
           </label>
         </div>
@@ -164,6 +169,7 @@ export default function Atena() {
             value={count}
             onChange={(e) => setCount(Number.parseInt(e.target.value))}
             min={1}
+            aria-label="Count"
           />
           <Button onClick={handleClear}>Clear</Button>
         </div>
