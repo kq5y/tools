@@ -119,7 +119,10 @@ export default function Dakoku() {
     reader.onload = (e) => {
       if (typeof e.target?.result !== "string") return;
       const uploadData = JSON.parse(e.target.result);
-      if (isSaveData(uploadData)) setData(uploadData);
+      if (isSaveData(uploadData)) {
+        setData(uploadData);
+        saveToLocalStorage(uploadData);
+      }
     };
     input.click();
   };
