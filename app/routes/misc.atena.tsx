@@ -301,12 +301,12 @@ export default function Atena() {
                     `${addr.name.replace(/\s/g, "　")}${addr.title.length > 0 ? `　${addr.title}` : ""}`,
                   ].join(" ")}
                   {addr.enclosure && (
-                    <div className="inline-block text-sm text-red-500 ml-4">
+                    <div className="inline-block text-sm text-red-600 ml-4">
                       {addr.enclosure}
                     </div>
                   )}
                   {addr.express && (
-                    <div className="inline-block text-sm text-red-500 ml-4">
+                    <div className="inline-block text-sm text-red-600 ml-4">
                       Express
                     </div>
                   )}
@@ -330,7 +330,7 @@ export default function Atena() {
       <div className="hidden">
         <div
           ref={printRef}
-          className="bg-white grid justify-center grid-cols-[repeat(auto-fill,95mm)] auto-rows-auto"
+          className="bg-white text-black grid justify-center grid-cols-[repeat(auto-fill,95mm)] auto-rows-auto"
           style={{ fontFamily: "ui-serif, serif" }}
         >
           {addressList.map((addr, index) => (
@@ -341,9 +341,9 @@ export default function Atena() {
             >
               {addr.express && (
                 <div className="flex items-center justify-center gap-x-2 mb-4">
-                  <span className="bg-red-500 w-32 h-3/5" />
-                  <span className="text-red-500 font-bold text-lg">速達</span>
-                  <span className="bg-red-500 w-32 h-3/5" />
+                  <span className="bg-red-600 w-32 h-3/5" />
+                  <span className="text-red-600 font-bold text-lg">速達</span>
+                  <span className="bg-red-600 w-32 h-3/5" />
                 </div>
               )}
               <p
@@ -365,8 +365,8 @@ export default function Atena() {
                 {addr.name.replace(/\s/g, "　")}　{addr.title}
               </p>
               {addr.enclosure && (
-                <div className="mt-2 ml-auto px-2 py-1 border-2 border-red-500">
-                  <p className="text-red-500 font-bold">{addr.enclosure}</p>
+                <div className="mt-2 ml-auto px-2 py-1 border-2 border-red-600">
+                  <p className="text-red-600 font-bold">{addr.enclosure}</p>
                 </div>
               )}
             </div>
