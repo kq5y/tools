@@ -9,6 +9,17 @@ export const meta: MetaFunction = () => {
   return getMeta("misc", "atena");
 };
 
+interface ZipCodeAPIResponse {
+  code: number;
+  data: {
+    pref: string;
+    address: string;
+    city: string;
+    town: string;
+    fullAddress: string;
+  };
+}
+
 interface Address {
   code: string;
   address: string[];
@@ -28,6 +39,25 @@ export default function Atena() {
     title: "",
   });
   const [count, setCount] = useState(1);
+  const handleSearchCode = async () => {
+    const code = recipientAddress.code.replace(/[^0-9]/g, "");
+    if (code.length !== 7) {
+      return;
+    }
+    const response = await fetch(`https://api.zipaddress.net/?zipcode=${code}`);
+    if (!response.ok) {
+      return;
+    }
+    const data = (await response.json()) as ZipCodeAPIResponse;
+    if (data.code === 200) {
+      setRecipientAddress((prev) => ({
+        ...prev,
+        address: prev.address.map((address, i) =>
+          i === 0 ? data.data.fullAddress : address
+        ),
+      }));
+    }
+  };
   const handleRecipientChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setRecipientAddress((prev) => ({
@@ -56,6 +86,9 @@ export default function Atena() {
       title: "",
     });
   };
+  const insertHyphen = (code: string) => {
+    return code.replace(/(\d{3})(\d{4})/, "$1-$2");
+  };
   return (
     <div>
       <h1 className="text-2xl font-bold">{getTitle("misc", "atena")}</h1>
@@ -72,6 +105,11 @@ export default function Atena() {
               maxLength={8}
             />
           </label>
+          <div className="col-span-2 flex items-center gap-x-2">
+            <Button className="mt-auto text-sm" onClick={handleSearchCode}>
+              Search Code
+            </Button>
+          </div>
           {recipientAddress.address.map((address, i) => (
             <label key={`address-${i.toString()}`} className="col-span-6">
               <span className="block font-medium">Address {i + 1}</span>
@@ -118,7 +156,7 @@ export default function Atena() {
             />
           </label>
         </div>
-        <div className="mt-2 flex items-center gap-x-2">
+        <div className="mt-2 flex items-center gap-x-4">
           <Button onClick={() => handlePrint()}>Print</Button>
           <input
             className="w-24 mr-auto px-3 py-2 border border-gray-300 rounded"
@@ -143,7 +181,7 @@ export default function Atena() {
             >
               <p className="text-base font-bold mb-2">
                 <span className="text-sm mr-1">〒</span>
-                {recipientAddress.code}
+                {insertHyphen(recipientAddress.code)}
               </p>
               {recipientAddress.address.map((line, i) => (
                 <p key={`address-${i.toString()}`}>
