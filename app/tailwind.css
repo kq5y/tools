@@ -17,6 +17,13 @@
   src: url("/fonts/Inconsolata-Bold.woff") format("woff");
 }
 
+@media print {
+  @page {
+    margin: 2rem;
+    padding-top: 0.5rem;
+  }
+}
+
 html,
 body {
   @apply bg-gray-100 text-gray-800;

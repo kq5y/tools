@@ -330,12 +330,13 @@ export default function Atena() {
       <div className="hidden">
         <div
           ref={printRef}
-          className="bg-white p-4 flex flex-wrap"
+          className="bg-white grid justify-center grid-cols-[repeat(auto-fill,95mm)] auto-rows-auto"
           style={{ fontFamily: "ui-serif, serif" }}
         >
           {addressList.map((addr, index) => (
             <div
-              className="border p-4 w-[100mm] min-h-[50mm] flex flex-col"
+              className="border p-4 w-[95mm] min-h-[50mm] flex flex-col break-inside-avoid"
+              style={{ pageBreakInside: "avoid" }}
               key={`card-${addr.code}-${index}`}
             >
               {addr.express && (
