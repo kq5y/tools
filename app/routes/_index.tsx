@@ -18,7 +18,7 @@ export default function Index() {
     {} as Record<string, ToolRoot[]>
   );
   return (
-    <div className="max-w-7xl mx-auto p-4">
+    <div className="max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold mb-4">Tools</h1>
       <div className="space-y-4">
         {Object.keys(rootmap).map((cat) => (
