@@ -331,8 +331,8 @@ export default function Dakoku() {
           </table>
         </div>
         <div className="mb-2 flex gap-2">
-          <Button onClick={handleDownloadJSON}>Download CSV</Button>
-          <Button onClick={handleUploadJSON}>Upload CSV</Button>
+          <Button onClick={handleDownloadJSON}>Download JSON</Button>
+          <Button onClick={handleUploadJSON}>Upload JSON</Button>
           <Button colorType="error" onClick={handleResetData}>
             Reset
           </Button>
