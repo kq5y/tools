@@ -317,7 +317,10 @@ export default function Atena() {
               className="border p-4 w-[100mm] min-h-[50mm] flex flex-col"
               key={`card-${addr.code}-${index}`}
             >
-              <p className="text-base font-bold mb-1">
+              <p
+                className="text-base font-bold mb-1"
+                style={{ fontFamily: "ui-sans-serif, sans-serif" }}
+              >
                 <span className="text-sm mr-1">〒</span>
                 {insertHyphen(addr.code)}
               </p>
