@@ -26,19 +26,38 @@ export function Button({
   return <button {...props} type={type} className={twClassName} />;
 }
 
-interface CrossButtonProps extends ComponentPropsWithoutRef<"button"> {}
+interface CharButtonProps extends ComponentPropsWithoutRef<"button"> {
+  char: string;
+  colorType?: "black" | "red";
+}
 
-export function CrossButton({ className, ...props }: CrossButtonProps) {
+export function CharButton({
+  className,
+  char,
+  colorType = "black",
+  ...props
+}: CharButtonProps) {
+  const twClassName = useMemo(() => {
+    let cn = "font-bold text-2xl transition";
+    if (colorType === "black") {
+      cn += " text-gray-600 hover:text-gray-800 disabled:text-gray-300";
+    } else if (colorType === "red") {
+      cn += " text-red-600 hover:text-red-800 disabled:text-red-300";
+    }
+    if (className) {
+      cn += ` ${className}`;
+    }
+    return cn.trim();
+  }, [colorType, className]);
   return (
-    <button
-      {...props}
-      type="button"
-      className={`font-bold text-2xl text-red-600 hover:text-red-800 disabled:text-red-300 transition ${className || ""}`}
-    >
-      x
+    <button {...props} type="button" className={twClassName}>
+      {char}
     </button>
   );
 }
+export const CrossButton = (
+  props: Omit<CharButtonProps, "char" | "colorType">
+) => CharButton({ ...props, char: "x", colorType: "red" });
 
 interface TabButtonProps extends ComponentPropsWithoutRef<"button"> {
   selected: boolean;
