@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 
 import { Button, CharButton, CrossButton } from "~/components/Button";
+import { Checkbox } from "~/components/Checkbox";
 import { getMeta, getTitle } from "~/routes";
 
 export const meta: MetaFunction = () => {
@@ -27,6 +28,7 @@ interface Address {
   name: string;
   title: string;
   enclosure: string;
+  express: boolean;
 }
 
 const isSaveData = (data: unknown): data is Address[] =>
@@ -39,7 +41,8 @@ const isSaveData = (data: unknown): data is Address[] =>
       typeof addr.company === "string" &&
       typeof addr.name === "string" &&
       typeof addr.title === "string" &&
-      typeof addr.enclosure === "string"
+      typeof addr.enclosure === "string" &&
+      typeof addr.express === "boolean"
   );
 
 export default function Atena() {
@@ -54,6 +57,7 @@ export default function Atena() {
     name: "",
     title: "",
     enclosure: "",
+    express: false,
   });
   const [addressList, setAddressList] = useState<Address[]>([]);
   const [count, setCount] = useState(1);
@@ -97,6 +101,7 @@ export default function Atena() {
       name: "",
       title: "",
       enclosure: "",
+      express: false,
     });
   };
   const handleAdd = () => {
@@ -237,8 +242,19 @@ export default function Atena() {
             />
           </label>
           <div className="col-span-6 flex items-center gap-x-4 mt-2">
+            <Checkbox
+              checked={editingAddress.express}
+              onChange={(e) =>
+                setEditingAddress((prev) => ({
+                  ...prev,
+                  express: e.target.checked,
+                }))
+              }
+            >
+              Express
+            </Checkbox>
             <input
-              className="w-24 mr-auto px-3 py-2 border border-gray-300 rounded"
+              className="w-16 px-3 py-2 ml-auto border border-gray-300 rounded"
               type="number"
               value={count}
               onChange={(e) => setCount(Number.parseInt(e.target.value))}
@@ -289,6 +305,11 @@ export default function Atena() {
                       {addr.enclosure}
                     </div>
                   )}
+                  {addr.express && (
+                    <div className="inline-block text-sm text-red-500 ml-4">
+                      Express
+                    </div>
+                  )}
                 </td>
                 <td className="border p-1 flex items-center justify-center gap-x-1 max-w-20">
                   <CharButton
@@ -317,6 +338,13 @@ export default function Atena() {
               className="border p-4 w-[100mm] min-h-[50mm] flex flex-col"
               key={`card-${addr.code}-${index}`}
             >
+              {addr.express && (
+                <div className="flex items-center justify-center gap-x-2 mb-4">
+                  <span className="bg-red-500 w-32 h-3/5" />
+                  <span className="text-red-500 font-bold text-lg">速達</span>
+                  <span className="bg-red-500 w-32 h-3/5" />
+                </div>
+              )}
               <p
                 className="text-base mb-1"
                 style={{ fontFamily: "ui-sans-serif, sans-serif" }}
