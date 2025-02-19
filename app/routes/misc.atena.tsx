@@ -104,6 +104,7 @@ export default function Atena() {
               className="w-full p-1 border border-gray-300 rounded"
               maxLength={8}
               aria-label="Zip Code"
+              placeholder="100-0001"
             />
           </label>
           <div className="col-span-2 flex items-center gap-x-2">
