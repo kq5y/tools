@@ -29,6 +29,7 @@ interface Address {
   title: string;
   enclosure: string;
   express: boolean;
+  sender: boolean;
 }
 
 const isSaveData = (data: unknown): data is Address[] =>
@@ -42,7 +43,8 @@ const isSaveData = (data: unknown): data is Address[] =>
       typeof addr.name === "string" &&
       typeof addr.title === "string" &&
       typeof addr.enclosure === "string" &&
-      typeof addr.express === "boolean"
+      typeof addr.express === "boolean" &&
+      typeof addr.sender === "boolean"
   );
 
 export default function Atena() {
@@ -58,6 +60,7 @@ export default function Atena() {
     title: "",
     enclosure: "",
     express: false,
+    sender: false,
   });
   const [addressList, setAddressList] = useState<Address[]>([]);
   const [count, setCount] = useState(1);
@@ -102,6 +105,7 @@ export default function Atena() {
       title: "",
       enclosure: "",
       express: false,
+      sender: false,
     });
   };
   const handleAdd = () => {
@@ -253,6 +257,17 @@ export default function Atena() {
             >
               Express
             </Checkbox>
+            <Checkbox
+              checked={editingAddress.sender}
+              onChange={(e) =>
+                setEditingAddress((prev) => ({
+                  ...prev,
+                  sender: e.target.checked,
+                }))
+              }
+            >
+              Sender
+            </Checkbox>
             <input
               className="w-16 px-3 py-2 ml-auto border border-gray-300 rounded"
               type="number"
@@ -310,6 +325,11 @@ export default function Atena() {
                       Express
                     </div>
                   )}
+                  {addr.sender && (
+                    <div className="inline-block text-sm text-blue-600 ml-4">
+                      Sender
+                    </div>
+                  )}
                 </td>
                 <td className="border p-1 flex items-center justify-center gap-x-1 max-w-20">
                   <CharButton
@@ -355,7 +375,7 @@ export default function Atena() {
               </p>
               {addr.address.map((line, i) => (
                 <p key={`${addr.code}-line-${i}`}>
-                  {line.length > 0 ? line : "　"}
+                  {line.length > 0 ? line : addr.sender ? "" : "　"}
                 </p>
               ))}
               {addr.company.length > 0 && (
