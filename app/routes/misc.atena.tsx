@@ -200,28 +200,40 @@ export default function Atena() {
               min={1}
               aria-label="Count"
             />
-            <Button onClick={handleAdd}>Add</Button>
+            <Button
+              onClick={handleAdd}
+              disabled={editingAddress.code.length < 7 || count < 1}
+            >
+              Add
+            </Button>
             <Button onClick={handleClear}>Clear</Button>
           </div>
         </div>
       </div>
       <div className="my-2 flex items-center gap-x-4">
         <h2 className="text-lg font-bold mr-auto">Address List</h2>
-        <Button onClick={() => handlePrint()}>Print</Button>
+        <Button
+          onClick={() => handlePrint()}
+          disabled={addressList.length === 0}
+        >
+          Print
+        </Button>
       </div>
       {addressList.length > 0 && (
-        <table className="w-full mb-4 border-collapse">
+        <table className="w-full mb-4 border-collapse table-auto">
           <tbody>
             {addressList.map((addr, index) => (
               <tr key={`${addr.code}-${addr.name}-${index}`}>
-                <td className="border p-1 text-center">{index + 1}</td>
-                <td className="border p-1">{insertHyphen(addr.code)}</td>
+                <td className="border p-1 text-center max-w-12">{index + 1}</td>
+                <td className="border p-1 max-w-32">
+                  {insertHyphen(addr.code)}
+                </td>
                 <td className="border p-1 text-sm">
                   {addr.address.join(" ")}
                   <br />
                   {[
                     addr.company,
-                    `${addr.name}${addr.title.length > 0 && `${addr.title}`}`,
+                    `${addr.name}${addr.title.length > 0 ? `　${addr.title}` : ""}`,
                   ].join(" ")}
                   {addr.enclosure && (
                     <div className="inline-block text-sm text-red-500 ml-4">
@@ -229,7 +241,7 @@ export default function Atena() {
                     </div>
                   )}
                 </td>
-                <td className="border p-1 flex items-center justify-center gap-x-1">
+                <td className="border p-1 flex items-center justify-center gap-x-1 max-w-20">
                   <CharButton
                     className="p-1"
                     char="↑"
