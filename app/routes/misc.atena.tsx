@@ -38,16 +38,13 @@ export default function Atena() {
     name: "",
     title: "",
   });
+  const [enclosureText, setEnclosureText] = useState("");
   const [count, setCount] = useState(1);
   const handleSearchCode = async () => {
     const code = recipientAddress.code.replace(/[^0-9]/g, "");
-    if (code.length !== 7) {
-      return;
-    }
+    if (code.length !== 7) return;
     const response = await fetch(`https://api.zipaddress.net/?zipcode=${code}`);
-    if (!response.ok) {
-      return;
-    }
+    if (!response.ok) return;
     const data = (await response.json()) as ZipCodeAPIResponse;
     if (data.code === 200) {
       setRecipientAddress((prev) => ({
@@ -85,6 +82,7 @@ export default function Atena() {
       name: "",
       title: "",
     });
+    setEnclosureText("");
   };
   const insertHyphen = (code: string) => {
     return code.replace(/(\d{3})(\d{4})/, "$1-$2");
@@ -161,6 +159,17 @@ export default function Atena() {
               aria-label="Title"
             />
           </label>
+          <label className="col-span-6">
+            <span className="block font-medium">Enclosure</span>
+            <input
+              type="text"
+              value={enclosureText}
+              onChange={(e) => setEnclosureText(e.target.value)}
+              className="w-full p-1 border border-gray-300 rounded"
+              aria-label="Enclosure"
+              placeholder="〇〇在中"
+            />
+          </label>
         </div>
         <div className="mt-2 flex items-center gap-x-4">
           <Button onClick={() => handlePrint()}>Print</Button>
@@ -183,10 +192,10 @@ export default function Atena() {
         >
           {Array.from({ length: count }).map((_, i) => (
             <div
-              className="border p-4 w-[100mm] h-[50mm]"
+              className="border p-4 w-[100mm] min-h-[50mm] flex flex-col"
               key={`card-${i.toString()}`}
             >
-              <p className="text-base font-bold mb-2">
+              <p className="text-base font-bold mb-1">
                 <span className="text-sm mr-1">〒</span>
                 {insertHyphen(recipientAddress.code)}
               </p>
@@ -196,11 +205,16 @@ export default function Atena() {
                 </p>
               ))}
               {recipientAddress.company.length > 0 && (
-                <p className="mt-2">{recipientAddress.company}</p>
+                <p className="mt-1">{recipientAddress.company}</p>
               )}
-              <p className={recipientAddress.company.length > 0 ? "" : "mt-2"}>
+              <p className={recipientAddress.company.length > 0 ? "" : "mt-1"}>
                 {recipientAddress.name}　{recipientAddress.title}
               </p>
+              {enclosureText.length > 0 && (
+                <div className="mt-2 ml-auto px-2 py-1 border-2 border-red-500">
+                  <p className="text-red-500 font-bold">{enclosureText}</p>
+                </div>
+              )}
             </div>
           ))}
         </div>
