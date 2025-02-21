@@ -192,7 +192,7 @@ export default function Atena() {
                 value={addr}
                 onChange={(e) => handleAddressChange(e, i)}
                 className="w-full p-1 border border-gray-300 rounded"
-                maxLength={21}
+                maxLength={19}
                 aria-label="Address"
               />
             </label>
@@ -205,7 +205,7 @@ export default function Atena() {
               value={editingAddress.company}
               onChange={handleChange}
               className="w-full p-1 border border-gray-300 rounded"
-              maxLength={21}
+              maxLength={19}
               aria-label="Company"
             />
           </label>
@@ -217,7 +217,7 @@ export default function Atena() {
               value={editingAddress.name}
               onChange={handleChange}
               className="w-full p-1 border border-gray-300 rounded"
-              maxLength={19}
+              maxLength={16}
               aria-label="Name"
             />
           </label>
@@ -241,6 +241,7 @@ export default function Atena() {
               value={editingAddress.enclosure}
               onChange={handleChange}
               className="w-full p-1 border border-gray-300 rounded"
+              maxLength={8}
               aria-label="Enclosure"
               placeholder="〇〇在中"
             />
@@ -355,15 +356,15 @@ export default function Atena() {
         >
           {addressList.map((addr, index) => (
             <div
-              className="border p-4 w-[95mm] min-h-[50mm] flex flex-col break-inside-avoid"
+              className="border p-6 w-[95mm] min-h-[50mm] flex flex-col break-inside-avoid"
               style={{ pageBreakInside: "avoid" }}
               key={`card-${addr.code}-${index}`}
             >
               {addr.express && (
                 <div className="flex items-center justify-center gap-x-2 mb-4">
-                  <span className="bg-red-600 w-32 h-3/5" />
+                  <span className="bg-red-600 w-28 h-3/5" />
                   <span className="text-red-600 font-bold text-lg">速達</span>
-                  <span className="bg-red-600 w-32 h-3/5" />
+                  <span className="bg-red-600 w-28 h-3/5" />
                 </div>
               )}
               <p
@@ -385,7 +386,7 @@ export default function Atena() {
                 {addr.name.replace(/\s/g, "　")}　{addr.title}
               </p>
               {addr.enclosure && (
-                <div className="mt-2 ml-auto px-2 py-1 border-2 border-red-600">
+                <div className="mt-3 ml-auto mr-1 px-2 py-1 border-2 border-red-600">
                   <p className="text-red-600 font-bold">{addr.enclosure}</p>
                 </div>
               )}
