@@ -246,44 +246,48 @@ export default function Atena() {
               placeholder="〇〇在中"
             />
           </label>
-          <div className="col-span-6 flex items-center gap-x-4 mt-2">
-            <Checkbox
-              checked={editingAddress.express}
-              onChange={(e) =>
-                setEditingAddress((prev) => ({
-                  ...prev,
-                  express: e.target.checked,
-                }))
-              }
-            >
-              Express
-            </Checkbox>
-            <Checkbox
-              checked={editingAddress.sender}
-              onChange={(e) =>
-                setEditingAddress((prev) => ({
-                  ...prev,
-                  sender: e.target.checked,
-                }))
-              }
-            >
-              Sender
-            </Checkbox>
-            <input
-              className="w-16 px-3 py-2 ml-auto border border-gray-300 rounded"
-              type="number"
-              value={count}
-              onChange={(e) => setCount(Number.parseInt(e.target.value))}
-              min={1}
-              aria-label="Count"
-            />
-            <Button
-              onClick={handleAdd}
-              disabled={editingAddress.code.length < 7 || count < 1}
-            >
-              Add
-            </Button>
-            <Button onClick={handleClear}>Clear</Button>
+          <div className="col-span-6 flex items-center gap-x-4 gap-y-2 mt-2 flex-wrap">
+            <div className="flex items-center gap-x-4">
+              <Checkbox
+                checked={editingAddress.express}
+                onChange={(e) =>
+                  setEditingAddress((prev) => ({
+                    ...prev,
+                    express: e.target.checked,
+                  }))
+                }
+              >
+                Express
+              </Checkbox>
+              <Checkbox
+                checked={editingAddress.sender}
+                onChange={(e) =>
+                  setEditingAddress((prev) => ({
+                    ...prev,
+                    sender: e.target.checked,
+                  }))
+                }
+              >
+                Sender
+              </Checkbox>
+            </div>
+            <div className="flex items-center gap-x-4 ml-auto">
+              <input
+                className="w-16 px-3 py-2 ml-auto border border-gray-300 rounded"
+                type="number"
+                value={count}
+                onChange={(e) => setCount(Number.parseInt(e.target.value))}
+                min={1}
+                aria-label="Count"
+              />
+              <Button
+                onClick={handleAdd}
+                disabled={editingAddress.code.length < 7 || count < 1}
+              >
+                Add
+              </Button>
+              <Button onClick={handleClear}>Clear</Button>
+            </div>
           </div>
         </div>
       </div>
