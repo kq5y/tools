@@ -91,6 +91,12 @@ const routes: ToolRoot[] = [
     title: "Atena Generator",
     desc: "Create address for envelope",
   },
+  {
+    cat: "misc",
+    slug: "unicode",
+    title: "Unicode Converter",
+    desc: "Convert characters to unicode",
+  },
 ];
 
 function getMeta(cat: string, slug: string) {
