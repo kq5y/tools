@@ -3,7 +3,7 @@
   "name": "tools",
   "main": "./server.ts",
   "compatibility_date": "2025-02-04",
-  "routes": [{ "pattern": "tools.t3x.jp", "custom_domain": true }],
+  "routes": [{ "pattern": "tools.kq5.jp", "custom_domain": true }],
   "workers_dev": false,
   "preview_urls": false,
   "assets": {

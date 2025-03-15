@@ -103,7 +103,7 @@ function getMeta(cat: string, slug: string) {
   const route = routes.filter(
     (route) => route.cat === cat && route.slug === slug
   )[0];
-  const ogImageUrl = `https://ogp.t3x.jp/tools/image.png?cat=${cat}&slug=${slug}&title=${encodeURIComponent(route.title)}`;
+  const ogImageUrl = `https://ogp.kq5.jp/tools/image.png?cat=${cat}&slug=${slug}&title=${encodeURIComponent(route.title)}`;
   return [
     { title: `${route.title} | Tools` },
     {
@@ -128,4 +128,4 @@ function getTitle(cat: string, slug: string): string | null {
   return route.length === 0 ? null : route[0].title;
 }
 
-export { routes, getMeta, getTitle, type ToolRoot };
+export { getMeta, getTitle, routes, type ToolRoot };
